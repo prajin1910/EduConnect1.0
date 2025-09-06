@@ -1,0 +1,35 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://reksitrajan01:8n4SHiaJfCZRrimg@cluster0.mperr.mongodb.net/assessment_system?retryWrites=true&w=majority
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME:reksit2005@gmail.com}
+    password: ${EMAIL_PASSWORD:vvog gosd mpgj ivmk}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+app:
+  jwt:
+    secret: myVeryLongAndSecureJWTSecretKeyThatIsAtLeast256BitsLongForHMACSHA256Algorithm
+    expiration: 604800000  # 7 days instead of 1 day
+  ai:
+    gemini:
+      api-key: AIzaSyBf9cbDiHXE1pR83hDyeMw_2QNZFSb4f_8
+      url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
+  resume:
+    upload-dir: uploads/resumes
+
+logging:
+  level:
+    com.stjoseph: DEBUG
