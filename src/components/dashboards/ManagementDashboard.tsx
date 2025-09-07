@@ -1,5 +1,6 @@
-import { Activity, BarChart3, Brain, Briefcase, Calendar, Eye, Lock, MessageCircle, Send, UserCheck, Users } from 'lucide-react';
+import { Activity, BarChart3, Brain, Briefcase, Calendar, Eye, Lock, MessageCircle, Send, Settings, UserCheck, Users } from 'lucide-react';
 import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 import Layout from '../common/Layout';
 import AIStudentAnalysis from '../features/AIStudentAnalysis';
 import AlumniDirectory from '../features/AlumniDirectory';
@@ -17,6 +18,7 @@ import UserChat from '../features/UserChat';
 const ManagementDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard-stats');
   const [eventTab, setEventTab] = useState('view-events'); // For event management sub-tabs
+  const { user } = useAuth();
 
   const tabs = [
     { id: 'dashboard-stats', name: 'Dashboard Overview', icon: BarChart3 },
@@ -66,22 +68,22 @@ const ManagementDashboard: React.FC = () => {
     return (
       <div className="space-y-6">
         {/* Event Management Sub-Navigation */}
-        <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
-            {eventTabs.map((tab) => {
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-xl overflow-hidden">
+          <nav className="flex space-x-0 overflow-x-auto">
+            {eventTabs.map((tab, index) => {
               const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setEventTab(tab.id)}
-                  className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors ${
+                  className={`whitespace-nowrap py-3 px-4 font-medium text-sm flex items-center space-x-2 transition-all duration-300 flex-shrink-0 ${
                     eventTab === tab.id
-                      ? 'border-purple-500 text-purple-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                      ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg'
+                      : 'text-blue-200 hover:text-white hover:bg-white/10'
+                  } ${index === 0 ? 'rounded-tl-xl' : ''} ${index === eventTabs.length - 1 ? 'rounded-tr-xl' : ''}`}
                 >
                   <Icon className="h-4 w-4" />
-                  <span>{tab.name}</span>
+                  <span className="hidden sm:block">{tab.name}</span>
                 </button>
               );
             })}
@@ -89,7 +91,7 @@ const ManagementDashboard: React.FC = () => {
         </div>
 
         {/* Event Management Content */}
-        <div>
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-xl p-6">
           {eventTab === 'view-events' && <ManagementEventsView />}
           {eventTab === 'alumni-requests' && <EventManagement />}
           {eventTab === 'invite-alumni' && <AlumniEventInvitation />}
@@ -103,30 +105,37 @@ const ManagementDashboard: React.FC = () => {
     <Layout title="Management Dashboard">
       <div className="space-y-6">
         {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-2xl p-6 text-white">
-          <h2 className="text-2xl font-bold mb-2">Management Portal</h2>
-          <p className="text-purple-100">
-            Monitor student performance, verify alumni, and oversee the entire assessment system.
-          </p>
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-white shadow-xl">
+          <div className="flex items-center space-x-4">
+            <div className="h-12 w-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
+              <Settings className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.name}!</h2>
+              <p className="text-blue-200">
+                Monitor student performance, verify alumni, and oversee the entire assessment system.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8 overflow-x-auto">
-            {tabs.map((tab) => {
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl overflow-hidden">
+          <nav className="flex space-x-0 overflow-x-auto">
+            {tabs.map((tab, index) => {
               const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors ${
+                  className={`whitespace-nowrap py-4 px-4 font-medium text-sm flex items-center space-x-2 transition-all duration-300 flex-shrink-0 ${
                     activeTab === tab.id
-                      ? 'border-purple-500 text-purple-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg'
+                      : 'text-blue-200 hover:text-white hover:bg-white/10'
+                  } ${index === 0 ? 'rounded-tl-2xl' : ''} ${index === tabs.length - 1 ? 'rounded-tr-2xl' : ''}`}
                 >
-                  <Icon className="h-5 w-5" />
-                  <span>{tab.name}</span>
+                  <Icon className="h-4 w-4" />
+                  <span className="hidden sm:block">{tab.name}</span>
                 </button>
               );
             })}
@@ -134,7 +143,7 @@ const ManagementDashboard: React.FC = () => {
         </div>
 
         {/* Active Component */}
-        <div className="mt-6">
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl p-6">
           {renderActiveComponent()}
         </div>
       </div>

@@ -96,7 +96,8 @@ const DashboardStatsComponent: React.FC = () => {
         pendingAlumni: response.pendingAlumni || 0,
         totalAssessments: response.totalAssessments || 0,
         systemHealth,
-        lastUpdated: new Date().toLocaleTimeString()
+        lastUpdated: new Date().toLocaleTimeString(),
+        recentActivities: response.recentActivities || []
       });
       
       if (showRefreshMessage) {
@@ -114,7 +115,8 @@ const DashboardStatsComponent: React.FC = () => {
           pendingAlumni: 0,
           totalAssessments: 0,
           systemHealth: '0%',
-          lastUpdated: 'Failed to load'
+          lastUpdated: 'Failed to load',
+          recentActivities: []
         });
       }
       

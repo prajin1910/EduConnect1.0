@@ -174,89 +174,96 @@ const StudentDashboard: React.FC = () => {
     <Layout title="Student Dashboard">
       <div className="space-y-6">
         {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white">
-          <h2 className="text-2xl font-bold mb-2">Welcome back, Student!</h2>
-          <p className="text-blue-100">
-            Ready to enhance your learning with AI-powered assessments, connect with alumni, and achieve your career goals.
-          </p>
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-white shadow-xl">
+          <div className="flex items-center space-x-4">
+            <div className="h-12 w-12 bg-gradient-to-r from-purple-500 to-blue-600 rounded-xl flex items-center justify-center">
+              <GraduationCap className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.name}!</h2>
+              <p className="text-blue-200">
+                Ready to enhance your learning with AI-powered assessments, connect with alumni, and achieve your career goals.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8 overflow-x-auto">
-            {tabs.map((tab) => {
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl overflow-hidden">
+          <nav className="flex space-x-0 overflow-x-auto">
+            {tabs.map((tab, index) => {
               const Icon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors ${
+                  className={`whitespace-nowrap py-4 px-4 font-medium text-sm flex items-center space-x-2 transition-all duration-300 flex-shrink-0 ${
                     activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                      ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-lg'
+                      : 'text-blue-200 hover:text-white hover:bg-white/10'
+                  } ${index === 0 ? 'rounded-tl-2xl' : ''} ${index === tabs.length - 1 ? 'rounded-tr-2xl' : ''}`}
                 >
-                  <Icon className="h-5 w-5" />
-                  <span>{tab.name}</span>
+                  <Icon className="h-4 w-4" />
+                  <span className="hidden sm:block">{tab.name}</span>
                 </button>
               );
             })}
           </nav>
         </div>
 
-        {/* Active Component */}
-        <div className="mt-6">
-          {renderActiveComponent()}
-        </div>
-
         {/* Quick Stats */}
         {activeTab === 'profile' && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white rounded-xl shadow-sm border p-6 text-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Brain className="h-6 w-6 text-blue-600" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-xl p-6 text-center hover:bg-white/15 transition-all duration-300 group">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                <Brain className="h-6 w-6 text-white" />
               </div>
-              <h3 className="font-semibold mb-1">AI Assessments</h3>
-              <p className="text-2xl font-bold text-blue-600">
+              <h3 className="font-semibold mb-1 text-white">AI Assessments</h3>
+              <p className="text-2xl font-bold text-blue-400">
                 {loading ? '...' : stats.aiAssessments}
               </p>
-              <p className="text-sm text-gray-600">Completed</p>
+              <p className="text-sm text-blue-200">Completed</p>
             </div>
             
-            <div className="bg-white rounded-xl shadow-sm border p-6 text-center">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <FileText className="h-6 w-6 text-green-600" />
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-xl p-6 text-center hover:bg-white/15 transition-all duration-300 group">
+              <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                <FileText className="h-6 w-6 text-white" />
               </div>
-              <h3 className="font-semibold mb-1">Class Tests</h3>
-              <p className="text-2xl font-bold text-green-600">
+              <h3 className="font-semibold mb-1 text-white">Class Tests</h3>
+              <p className="text-2xl font-bold text-green-400">
                 {loading ? '...' : stats.classTests}
               </p>
-              <p className="text-sm text-gray-600">This Semester</p>
+              <p className="text-sm text-blue-200">This Semester</p>
             </div>
             
-            <div className="bg-white rounded-xl shadow-sm border p-6 text-center">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <CheckSquare className="h-6 w-6 text-purple-600" />
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-xl p-6 text-center hover:bg-white/15 transition-all duration-300 group">
+              <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                <CheckSquare className="h-6 w-6 text-white" />
               </div>
-              <h3 className="font-semibold mb-1">Tasks</h3>
-              <p className="text-2xl font-bold text-purple-600">
+              <h3 className="font-semibold mb-1 text-white">Tasks</h3>
+              <p className="text-2xl font-bold text-purple-400">
                 {loading ? '...' : stats.activeTasks}
               </p>
-              <p className="text-sm text-gray-600">Active Goals</p>
+              <p className="text-sm text-blue-200">Active Goals</p>
             </div>
             
-            <div className="bg-white rounded-xl shadow-sm border p-6 text-center">
-              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <GraduationCap className="h-6 w-6 text-orange-600" />
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-xl p-6 text-center hover:bg-white/15 transition-all duration-300 group">
+              <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                <GraduationCap className="h-6 w-6 text-white" />
               </div>
-              <h3 className="font-semibold mb-1">Connections</h3>
-              <p className="text-2xl font-bold text-orange-600">
+              <h3 className="font-semibold mb-1 text-white">Connections</h3>
+              <p className="text-2xl font-bold text-orange-400">
                 {loading ? '...' : stats.alumniConnections}
               </p>
-              <p className="text-sm text-gray-600">Connected</p>
+              <p className="text-sm text-blue-200">Connected</p>
             </div>
           </div>
         )}
+
+        {/* Active Component */}
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl p-6">
+          {renderActiveComponent()}
+        </div>
       </div>
     </Layout>
   );

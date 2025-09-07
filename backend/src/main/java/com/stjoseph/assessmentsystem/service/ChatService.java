@@ -43,23 +43,47 @@ public class ChatService {
     private ActivityService activityService;
     
     public List<Map<String, Object>> getConversations(String userEmail) {
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        System.out.println("ChatService: === START getConversations for: " + userEmail + " ===");
+        
+        // Find user - try User table first, then Alumni table
+        User user = null;
+        Alumni alumniUser = null;
+        final String userId;
+        
+        Optional<User> userOpt = userRepository.findByEmail(userEmail);
+        if (userOpt.isPresent()) {
+            user = userOpt.get();
+            userId = user.getId();
+            System.out.println("ChatService: Found user in User table - ID: " + userId + ", Name: " + user.getName());
+        } else {
+            // Try Alumni table if not found in User table
+            Optional<Alumni> alumniOpt = alumniRepository.findByEmail(userEmail);
+            if (alumniOpt.isPresent() && alumniOpt.get().getStatus() == Alumni.AlumniStatus.APPROVED) {
+                alumniUser = alumniOpt.get();
+                userId = alumniUser.getId();
+                System.out.println("ChatService: Found user in Alumni table - ID: " + userId + ", Name: " + alumniUser.getName());
+            } else {
+                throw new RuntimeException("User not found");
+            }
+        }
         
         // Get all chat messages involving this user
-        List<ChatMessage> allMessages = chatMessageRepository.findByUserInvolved(user.getId());
+        List<ChatMessage> allMessages = chatMessageRepository.findByUserInvolved(userId);
+        System.out.println("ChatService: Found " + allMessages.size() + " total messages for user " + userId);
         
         // Group by conversation partner
         Map<String, List<ChatMessage>> conversationMap = new HashMap<>();
         
         for (ChatMessage message : allMessages) {
-            String partnerId = message.getSenderId().equals(user.getId()) ? 
+            String partnerId = message.getSenderId().equals(userId) ? 
                               message.getReceiverId() : message.getSenderId();
             
             if (!"AI".equals(partnerId)) { // Exclude AI conversations
                 conversationMap.computeIfAbsent(partnerId, k -> new ArrayList<>()).add(message);
             }
         }
+        
+        System.out.println("ChatService: Found " + conversationMap.size() + " unique conversation partners");
         
         // Create conversation objects
         List<Map<String, Object>> conversations = new ArrayList<>();
@@ -68,8 +92,22 @@ public class ChatService {
             String partnerId = entry.getKey();
             List<ChatMessage> messages = entry.getValue();
             
+            System.out.println("ChatService: Processing conversation with partner ID: " + partnerId + " (" + messages.size() + " messages)");
+            
+            // Try to find partner in User table first, then Alumni table
             User partner = userRepository.findById(partnerId).orElse(null);
-            if (partner == null) continue;
+            Alumni partnerAlumni = null;
+            
+            if (partner == null) {
+                partnerAlumni = alumniRepository.findById(partnerId).orElse(null);
+                if (partnerAlumni == null || partnerAlumni.getStatus() != Alumni.AlumniStatus.APPROVED) {
+                    System.out.println("ChatService: Partner not found or not approved, skipping partner ID: " + partnerId);
+                    continue; // Skip if partner not found or not approved
+                }
+                System.out.println("ChatService: Found partner in Alumni table: " + partnerAlumni.getName());
+            } else {
+                System.out.println("ChatService: Found partner in User table: " + partner.getName());
+            }
             
             // Get latest message
             ChatMessage latestMessage = messages.stream()
@@ -78,17 +116,25 @@ public class ChatService {
             
             // Count unread messages
             long unreadCount = messages.stream()
-                    .filter(m -> !m.isRead() && !m.getSenderId().equals(user.getId()))
+                    .filter(m -> !m.isRead() && !m.getSenderId().equals(userId))
                     .count();
             
             Map<String, Object> conversation = new HashMap<>();
             
             Map<String, Object> userMap = new HashMap<>();
-            userMap.put("id", partner.getId());
-            userMap.put("name", partner.getName());
-            userMap.put("email", partner.getEmail());
-            userMap.put("role", partner.getRole().name());
-            userMap.put("department", partner.getDepartment());
+            if (partner != null) {
+                userMap.put("id", partner.getId());
+                userMap.put("name", partner.getName());
+                userMap.put("email", partner.getEmail());
+                userMap.put("role", partner.getRole().name());
+                userMap.put("department", partner.getDepartment());
+            } else {
+                userMap.put("id", partnerAlumni.getId());
+                userMap.put("name", partnerAlumni.getName());
+                userMap.put("email", partnerAlumni.getEmail());
+                userMap.put("role", "ALUMNI");
+                userMap.put("department", partnerAlumni.getDepartment());
+            }
             
             conversation.put("user", userMap);
             conversation.put("lastMessage", latestMessage);
@@ -106,6 +152,9 @@ public class ChatService {
             if (m2 == null) return -1;
             return m2.getTimestamp().compareTo(m1.getTimestamp());
         });
+        
+        System.out.println("ChatService: Returning " + conversations.size() + " conversations");
+        System.out.println("ChatService: === END getConversations ===");
         
         return conversations;
     }
@@ -207,13 +256,30 @@ public class ChatService {
     }
     
     public void markMessagesAsRead(String userEmail, String partnerId) {
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Find user - try User table first, then Alumni table
+        User user = null;
+        Alumni alumniUser = null;
+        final String userId;
+        
+        Optional<User> userOpt = userRepository.findByEmail(userEmail);
+        if (userOpt.isPresent()) {
+            user = userOpt.get();
+            userId = user.getId();
+        } else {
+            // Try Alumni table if not found in User table
+            Optional<Alumni> alumniOpt = alumniRepository.findByEmail(userEmail);
+            if (alumniOpt.isPresent() && alumniOpt.get().getStatus() == Alumni.AlumniStatus.APPROVED) {
+                alumniUser = alumniOpt.get();
+                userId = alumniUser.getId();
+            } else {
+                throw new RuntimeException("User not found");
+            }
+        }
         
         // Update messages as read using a custom query approach
         List<ChatMessage> unreadMessages = chatMessageRepository.findAll().stream()
                 .filter(msg -> msg.getSenderId().equals(partnerId) && 
-                              msg.getReceiverId().equals(user.getId()) && 
+                              msg.getReceiverId().equals(userId) && 
                               !msg.isRead())
                 .collect(Collectors.toList());
         
@@ -261,38 +327,110 @@ public class ChatService {
     }
     
     public ChatMessage sendMessage(String receiverId, String message, String senderEmail) {
-        User sender = userRepository.findByEmail(senderEmail)
-                .orElseThrow(() -> new RuntimeException("Sender not found"));
+        // Find sender - try User table first, then Alumni table
+        User sender = null;
+        Alumni senderAlumni = null;
         
-        User receiver = userRepository.findById(receiverId)
-                .orElseThrow(() -> new RuntimeException("Receiver not found"));
+        Optional<User> senderUserOpt = userRepository.findByEmail(senderEmail);
+        if (senderUserOpt.isPresent()) {
+            sender = senderUserOpt.get();
+        } else {
+            // Try Alumni table if not found in User table
+            Optional<Alumni> senderAlumniOpt = alumniRepository.findByEmail(senderEmail);
+            if (senderAlumniOpt.isPresent() && senderAlumniOpt.get().getStatus() == Alumni.AlumniStatus.APPROVED) {
+                senderAlumni = senderAlumniOpt.get();
+            } else {
+                throw new RuntimeException("Sender not found");
+            }
+        }
+        
+        // Find receiver - try User table first, then Alumni table
+        User receiver = null;
+        Alumni receiverAlumni = null;
+        
+        Optional<User> receiverUserOpt = userRepository.findById(receiverId);
+        if (receiverUserOpt.isPresent()) {
+            receiver = receiverUserOpt.get();
+        } else {
+            // Try Alumni table if not found in User table
+            Optional<Alumni> receiverAlumniOpt = alumniRepository.findById(receiverId);
+            if (receiverAlumniOpt.isPresent() && receiverAlumniOpt.get().getStatus() == Alumni.AlumniStatus.APPROVED) {
+                receiverAlumni = receiverAlumniOpt.get();
+            } else {
+                throw new RuntimeException("Receiver not found");
+            }
+        }
         
         ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setSenderId(sender.getId());
-        chatMessage.setSenderName(sender.getName());
-        chatMessage.setReceiverId(receiver.getId());
-        chatMessage.setReceiverName(receiver.getName());
+        
+        // Set sender info
+        if (sender != null) {
+            chatMessage.setSenderId(sender.getId());
+            chatMessage.setSenderName(sender.getName());
+            chatMessage.setSenderEmail(sender.getEmail());
+        } else if (senderAlumni != null) {
+            chatMessage.setSenderId(senderAlumni.getId());
+            chatMessage.setSenderName(senderAlumni.getName());
+            chatMessage.setSenderEmail(senderAlumni.getEmail());
+        } else {
+            throw new RuntimeException("Sender information not found");
+        }
+        
+        // Set receiver info
+        if (receiver != null) {
+            chatMessage.setReceiverId(receiver.getId());
+            chatMessage.setReceiverName(receiver.getName());
+            chatMessage.setReceiverEmail(receiver.getEmail());
+        } else if (receiverAlumni != null) {
+            chatMessage.setReceiverId(receiverAlumni.getId());
+            chatMessage.setReceiverName(receiverAlumni.getName());
+            chatMessage.setReceiverEmail(receiverAlumni.getEmail());
+        } else {
+            throw new RuntimeException("Receiver information not found");
+        }
+        
         chatMessage.setMessage(message);
         chatMessage.setType(ChatMessage.MessageType.USER_TO_USER);
         
         ChatMessage saved = chatMessageRepository.save(chatMessage);
         
         // Send email notification
-        emailService.sendChatNotification(receiver.getEmail(), sender.getName(), message);
+        String receiverEmail = receiver != null ? receiver.getEmail() : 
+                              (receiverAlumni != null ? receiverAlumni.getEmail() : null);
+        String senderName = sender != null ? sender.getName() : 
+                           (senderAlumni != null ? senderAlumni.getName() : null);
+        
+        if (receiverEmail != null && senderName != null) {
+            emailService.sendChatNotification(receiverEmail, senderName, message);
+        }
         
         // Log activity for both users
-        String activityDesc = "Sent message to " + receiver.getName();
-        if (receiver.getRole() == User.UserRole.ALUMNI) {
+        String receiverName = receiver != null ? receiver.getName() : 
+                             (receiverAlumni != null ? receiverAlumni.getName() : null);
+        String activityDesc = "Sent message to " + (receiverName != null ? receiverName : "Unknown");
+        
+        // Determine if receiver is alumni (either from User table with ALUMNI role or from Alumni table)
+        boolean isReceiverAlumni = (receiver != null && receiver.getRole() == User.UserRole.ALUMNI) || (receiverAlumni != null);
+        
+        if (isReceiverAlumni) {
             try {
-                activityService.logActivityByUserId(sender.getId(), "ALUMNI_CHAT", activityDesc);
-                System.out.println("ChatService: Activity logged for alumni chat");
+                String senderIdForActivity = sender != null ? sender.getId() : 
+                                           (senderAlumni != null ? senderAlumni.getId() : null);
+                if (senderIdForActivity != null) {
+                    activityService.logActivityByUserId(senderIdForActivity, "ALUMNI_CHAT", activityDesc);
+                    System.out.println("ChatService: Activity logged for alumni chat");
+                }
             } catch (Exception e) {
                 System.err.println("ChatService: Failed to log alumni chat activity: " + e.getMessage());
             }
-        } else if (receiver.getRole() == User.UserRole.PROFESSOR) {
+        } else if (receiver != null && receiver.getRole() == User.UserRole.PROFESSOR) {
             try {
-                activityService.logActivityByUserId(sender.getId(), "PROFESSOR_CHAT", activityDesc);
-                System.out.println("ChatService: Activity logged for professor chat");
+                String senderIdForActivity = sender != null ? sender.getId() : 
+                                           (senderAlumni != null ? senderAlumni.getId() : null);
+                if (senderIdForActivity != null) {
+                    activityService.logActivityByUserId(senderIdForActivity, "PROFESSOR_CHAT", activityDesc);
+                    System.out.println("ChatService: Activity logged for professor chat");
+                }
             } catch (Exception e) {
                 System.err.println("ChatService: Failed to log professor chat activity: " + e.getMessage());
             }
@@ -302,11 +440,28 @@ public class ChatService {
     }
     
     public List<ChatMessage> getChatHistory(String userEmail, String otherUserId) {
-        User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        // Find user - try User table first, then Alumni table
+        User user = null;
+        Alumni alumniUser = null;
+        final String userId;
+        
+        Optional<User> userOpt = userRepository.findByEmail(userEmail);
+        if (userOpt.isPresent()) {
+            user = userOpt.get();
+            userId = user.getId();
+        } else {
+            // Try Alumni table if not found in User table
+            Optional<Alumni> alumniOpt = alumniRepository.findByEmail(userEmail);
+            if (alumniOpt.isPresent() && alumniOpt.get().getStatus() == Alumni.AlumniStatus.APPROVED) {
+                alumniUser = alumniOpt.get();
+                userId = alumniUser.getId();
+            } else {
+                throw new RuntimeException("User not found");
+            }
+        }
         
         return chatMessageRepository.findChatMessages(
-                user.getId(), 
+                userId, 
                 otherUserId, 
                 PageRequest.of(0, 50, Sort.by("timestamp").descending())
         );

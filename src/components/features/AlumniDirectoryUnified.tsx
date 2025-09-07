@@ -273,48 +273,72 @@ const AlumniDirectoryUnified: React.FC = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Alumni Directory
-        </h1>
-        <p className="text-gray-600">
-          Connect with {alumni.length} verified alumni from our institution
-        </p>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-5xl mx-auto p-2">
+        {/* Ultra Compact Header */}
+        <div className="bg-white rounded-md shadow-sm border border-gray-200 p-3 mb-3">
+          <div className="flex items-center space-x-3 mb-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-slate-700 to-slate-900 rounded-md flex items-center justify-center">
+              <Users className="h-4 w-4 text-white" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-gray-900">Alumni Directory</h1>
+              <p className="text-gray-600 text-xs">
+                {alumni.length} verified alumni
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4 text-xs">
+            <div className="flex items-center space-x-1 text-emerald-600">
+              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
+              <span>{alumni.filter(a => a.isAvailableForMentorship || a.mentorshipAvailable || a.availableForMentorship).length} Mentors</span>
+            </div>
+            <div className="flex items-center space-x-1 text-blue-600">
+              <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+              <span>{new Set(alumni.map(a => a.department)).size} Departments</span>
+            </div>
+            <div className="flex items-center space-x-1 text-purple-600">
+              <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>
+              <span>{new Set(alumni.map(a => a.currentCompany)).size} Companies</span>
+            </div>
+          </div>
+        </div>
 
-      {/* Search and Filters */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      {/* Ultra Compact Search and Filters */}
+      <div className="bg-white rounded-md shadow-sm border border-gray-200 p-3 mb-3">
+        <div className="mb-2">
+          <h2 className="text-sm font-semibold text-gray-900">Find Alumni</h2>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
           {/* Search */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Search Alumni
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              Search
             </label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-gray-400" />
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search by name, department, or company..."
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                placeholder="Search alumni..."
+                className="w-full pl-7 pr-2 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
               />
             </div>
           </div>
 
           {/* Department Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
               Department
             </label>
             <select
               value={selectedDepartment}
               onChange={(e) => setSelectedDepartment(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
             >
-              <option value="">All Departments</option>
+              <option value="">All</option>
               {getDepartments().map(dept => (
                 <option key={dept} value={dept}>{dept}</option>
               ))}
@@ -323,15 +347,15 @@ const AlumniDirectoryUnified: React.FC = () => {
 
           {/* Year Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Graduation Year
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              Year
             </label>
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
             >
-              <option value="">All Years</option>
+              <option value="">All</option>
               {getGraduationYears().map(year => (
                 <option key={year} value={year}>{year}</option>
               ))}
@@ -339,174 +363,197 @@ const AlumniDirectoryUnified: React.FC = () => {
           </div>
         </div>
 
-        {/* Results Count */}
-        <div className="mt-4 text-sm text-gray-600">
-          Showing {filteredAlumni.length} of {alumni.length} alumni
+        {/* Ultra Compact Results */}
+        <div className="mt-2 flex items-center justify-between">
+          <div className="text-gray-600 text-xs">
+            <span className="text-gray-900 font-medium">{filteredAlumni.length}</span> of <span className="text-gray-900 font-medium">{alumni.length}</span> alumni
+          </div>
+          {(searchTerm || selectedDepartment || selectedYear) && (
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedDepartment('');
+                setSelectedYear('');
+              }}
+              className="text-blue-600 hover:text-blue-700 text-xs font-medium"
+            >
+              Clear
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Alumni Display - Professional Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Ultra Compact Alumni Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {filteredAlumni.length === 0 ? (
-          <div className="col-span-full text-center py-12">
-            <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Alumni Found</h3>
-            <p className="text-gray-500">Try adjusting your search criteria.</p>
+          <div className="col-span-full">
+            <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6 text-center">
+              <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center mx-auto mb-3">
+                <Users className="h-6 w-6 text-gray-400" />
+              </div>
+              <h3 className="text-sm font-semibold text-gray-900 mb-1">No Alumni Found</h3>
+              <p className="text-gray-600 text-xs">Try adjusting your search.</p>
+            </div>
           </div>
         ) : (
           filteredAlumni.map((alum) => (
-            <div key={alum.id} className="bg-white rounded-lg shadow-sm border hover:shadow-lg transition-all duration-300 overflow-hidden group">
-              {/* Compact Professional Header */}
-              <div className="bg-gradient-to-r from-slate-800 to-slate-900 p-4 text-white relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
-                <div className="relative flex items-center space-x-3">
-                  <div className="relative flex-shrink-0">
-                    <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center ring-2 ring-white/20">
+            <div key={alum.id} className="group">
+              <div className="bg-white rounded-md shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 overflow-hidden">
+                {/* Mini Header */}
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-2 text-white">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-white/20 rounded-md flex items-center justify-center">
                       {alum.profilePicture ? (
                         <img 
                           src={alum.profilePicture} 
                           alt={alum.name} 
-                          className="w-full h-full rounded-full object-cover"
+                          className="w-full h-full rounded-md object-cover"
                         />
                       ) : (
-                        <User className="h-6 w-6 text-white" />
+                        <User className="h-4 w-4 text-white" />
                       )}
                     </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-white text-xs leading-tight">{alum.name}</h3>
+                      <p className="text-white/90 text-xs truncate">
+                        {alum.currentPosition || alum.currentJob || 'Alumni'}
+                      </p>
+                    </div>
+                    
                     {(alum.isAvailableForMentorship || alum.mentorshipAvailable || alum.availableForMentorship) && (
-                      <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center ring-2 ring-white">
-                        <UserCheck className="h-2.5 w-2.5 text-white" />
+                      <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                        <UserCheck className="h-2 w-2 text-white" />
                       </div>
                     )}
                   </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-white truncate text-sm leading-tight">{alum.name}</h3>
-                    <p className="text-white/80 text-xs truncate font-medium">
-                      {alum.currentPosition || alum.currentJob || 'Alumni'}
-                    </p>
-                    <p className="text-white/60 text-xs truncate">
-                      {alum.currentCompany || alum.company || alum.placedCompany || 'Company not specified'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Compact Information Grid */}
-              <div className="p-4 space-y-3">
-                {/* Key Information Row */}
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="bg-blue-50 p-2 rounded-md">
-                    <div className="flex items-center space-x-1 text-blue-600">
-                      <Calendar className="h-3 w-3" />
-                      <span className="font-medium">Year</span>
-                    </div>
-                    <div className="text-blue-800 font-medium">{alum.graduationYear || 'N/A'}</div>
-                  </div>
-                  
-                  <div className="bg-green-50 p-2 rounded-md">
-                    <div className="flex items-center space-x-1 text-green-600">
-                      <MapPin className="h-3 w-3" />
-                      <span className="font-medium">Location</span>
-                    </div>
-                    <div className="text-green-800 font-medium truncate">{alum.location || 'Not specified'}</div>
-                  </div>
                 </div>
 
-                {/* Department & Experience */}
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div className="bg-purple-50 p-2 rounded-md">
-                    <div className="flex items-center space-x-1 text-purple-600">
-                      <Building className="h-3 w-3" />
-                      <span className="font-medium">Department</span>
-                    </div>
-                    <div className="text-purple-800 font-medium truncate">{alum.department}</div>
-                  </div>
-                  
-                  {alum.workExperience && (
-                    <div className="bg-orange-50 p-2 rounded-md">
-                      <div className="flex items-center space-x-1 text-orange-600">
-                        <Award className="h-3 w-3" />
-                        <span className="font-medium">Experience</span>
+                {/* Compact Information */}
+                <div className="p-4 space-y-3">
+                  {/* Key Information */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-blue-50 p-2 rounded-lg">
+                      <div className="flex items-center space-x-1 text-blue-600 mb-1">
+                        <Calendar className="h-3 w-3" />
+                        <span className="font-medium text-xs">Graduation</span>
                       </div>
-                      <div className="text-orange-800 font-medium">{alum.workExperience}+ years</div>
+                      <div className="text-blue-900 font-semibold text-sm">{alum.graduationYear || 'N/A'}</div>
+                    </div>
+                    
+                    <div className="bg-green-50 p-2 rounded-lg">
+                      <div className="flex items-center space-x-1 text-green-600 mb-1">
+                        <MapPin className="h-3 w-3" />
+                        <span className="font-medium text-xs">Location</span>
+                      </div>
+                      <div className="text-green-900 font-semibold text-sm truncate">{alum.location || 'Not specified'}</div>
+                    </div>
+                  </div>
+
+                  {/* Department & Experience */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-purple-50 p-2 rounded-lg">
+                      <div className="flex items-center space-x-1 text-purple-600 mb-1">
+                        <Building className="h-3 w-3" />
+                        <span className="font-medium text-xs">Department</span>
+                      </div>
+                      <div className="text-purple-900 font-semibold text-sm truncate">{alum.department}</div>
+                    </div>
+                    
+                    <div className="bg-orange-50 p-2 rounded-lg">
+                      <div className="flex items-center space-x-1 text-orange-600 mb-1">
+                        <Award className="h-3 w-3" />
+                        <span className="font-medium text-xs">Experience</span>
+                      </div>
+                      <div className="text-orange-900 font-bold text-sm">{alum.workExperience ? `${alum.workExperience}+ years` : 'Not specified'}</div>
+                    </div>
+                  </div>
+
+                  {/* Skills Preview */}
+                  {alum.skills && alum.skills.length > 0 && (
+                    <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-4 rounded-xl border border-slate-200">
+                      <div className="text-slate-700 text-sm font-semibold mb-2">Top Skills</div>
+                      <div className="flex flex-wrap gap-2">
+                        {alum.skills.slice(0, 3).map((skill, index) => (
+                          <span key={index} className="bg-white text-slate-700 px-3 py-1 rounded-lg text-xs font-medium border border-slate-200 shadow-sm">
+                            {skill}
+                          </span>
+                        ))}
+                        {alum.skills.length > 3 && (
+                          <span className="bg-slate-200 text-slate-600 px-3 py-1 rounded-lg text-xs font-medium">
+                            +{alum.skills.length - 3} more
+                          </span>
+                        )}
+                      </div>
                     </div>
                   )}
-                </div>
 
-                {/* Skills Preview */}
-                {alum.skills && alum.skills.length > 0 && (
-                  <div className="bg-gray-50 p-2 rounded-md">
-                    <div className="text-gray-600 text-xs font-medium mb-1">Top Skills</div>
-                    <div className="flex flex-wrap gap-1">
-                      {alum.skills.slice(0, 3).map((skill, index) => (
-                        <span key={index} className="bg-white text-gray-700 px-2 py-0.5 rounded text-xs font-medium border">
-                          {skill}
-                        </span>
-                      ))}
-                      {alum.skills.length > 3 && (
-                        <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded text-xs">
-                          +{alum.skills.length - 3}
-                        </span>
+                  {/* Mentorship Status - Enhanced */}
+                  <div className={`rounded-xl p-4 border transition-all duration-300 ${
+                    (alum.isAvailableForMentorship || alum.mentorshipAvailable || alum.availableForMentorship) 
+                      ? 'bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 shadow-emerald-100 shadow-lg' 
+                      : 'bg-gradient-to-br from-slate-50 to-slate-100 border-slate-200'
+                  }`}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        {(alum.isAvailableForMentorship || alum.mentorshipAvailable || alum.availableForMentorship) ? (
+                          <>
+                            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                              <UserCheck className="h-4 w-4 text-white" />
+                            </div>
+                            <div>
+                              <span className="text-sm font-bold text-emerald-900">Mentoring Available</span>
+                              <p className="text-xs text-emerald-700">Ready to guide and support</p>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="w-8 h-8 bg-slate-300 rounded-lg flex items-center justify-center">
+                              <User className="h-4 w-4 text-slate-600" />
+                            </div>
+                            <div>
+                              <span className="text-sm font-bold text-slate-700">Not Available</span>
+                              <p className="text-xs text-slate-600">Currently unavailable</p>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      {(alum.isAvailableForMentorship || alum.mentorshipAvailable || alum.availableForMentorship) && (
+                        <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
                       )}
                     </div>
                   </div>
-                )}
 
-                {/* Mentorship Status - Compact */}
-                <div className={`rounded-md p-2 border ${
-                  (alum.isAvailableForMentorship || alum.mentorshipAvailable || alum.availableForMentorship) 
-                    ? 'bg-emerald-50 border-emerald-200' 
-                    : 'bg-gray-50 border-gray-200'
-                }`}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      {(alum.isAvailableForMentorship || alum.mentorshipAvailable || alum.availableForMentorship) ? (
-                        <>
-                          <UserCheck className="h-3 w-3 text-emerald-600" />
-                          <span className="text-xs font-medium text-emerald-800">Mentoring Available</span>
-                        </>
-                      ) : (
-                        <>
-                          <User className="h-3 w-3 text-gray-500" />
-                          <span className="text-xs font-medium text-gray-600">Not Available</span>
-                        </>
-                      )}
-                    </div>
-                    {(alum.isAvailableForMentorship || alum.mentorshipAvailable || alum.availableForMentorship) && (
-                      <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    )}
+                  {/* Enhanced Action Buttons */}
+                  <div className="flex space-x-3 pt-2">
+                    <button
+                      onClick={() => handleViewProfile(alum)}
+                      className="flex-1 bg-gradient-to-r from-slate-700 to-slate-800 text-white py-3 px-4 rounded-xl hover:from-slate-800 hover:to-slate-900 transition-all duration-300 font-medium flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                    >
+                      <User className="h-4 w-4" />
+                      <span>View Profile</span>
+                    </button>
+                    
+                    {/* Contact Button */}
+                    <button
+                      onClick={() => window.open(`mailto:${alum.email}`, '_blank')}
+                      className="px-4 py-3 border-2 border-slate-300 text-slate-600 rounded-xl hover:border-slate-400 hover:bg-slate-50 transition-all duration-300 font-medium flex items-center justify-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                    >
+                      <Mail className="h-4 w-4" />
+                    </button>
                   </div>
-                </div>
 
-                {/* Action Buttons - Compact */}
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => handleViewProfile(alum)}
-                    className="flex-1 bg-slate-700 text-white py-2 px-3 rounded-md hover:bg-slate-800 transition-colors text-xs font-medium flex items-center justify-center space-x-1"
-                  >
-                    <User className="h-3 w-3" />
-                    <span>Profile</span>
-                  </button>
-                  
-                  {/* Mentoring Button - Only show if available for mentorship */}
+                  {/* Connection Manager for mentoring - Only show if available */}
                   {(alum.isAvailableForMentorship || alum.mentorshipAvailable || alum.availableForMentorship) && (
-                    <div className="flex-1">
+                    <div className="pt-2">
                       <ConnectionManager
                         targetUserId={alum.id}
                         targetUserName={alum.name}
                         onConnectionUpdate={handleConnectionUpdate}
-                        buttonText="Mentoring"
+                        buttonText="Request Mentoring"
                       />
                     </div>
                   )}
-                  
-                  {/* Contact Button */}
-                  <button
-                    onClick={() => window.open(`mailto:${alum.email}`, '_blank')}
-                    className="px-3 py-2 border border-slate-300 text-slate-600 rounded-md hover:bg-slate-50 transition-colors text-xs font-medium flex items-center justify-center"
-                  >
-                    <Mail className="h-3 w-3" />
-                  </button>
                 </div>
               </div>
             </div>
@@ -819,6 +866,7 @@ const AlumniDirectoryUnified: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };
