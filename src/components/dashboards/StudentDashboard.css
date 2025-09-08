@@ -1,0 +1,257 @@
+/* StudentDashboard specific styles for external components */
+
+/* Override styles for AlumniDirectory and JobBoard components */
+.alumni-directory-wrapper,
+.job-board-wrapper {
+  min-height: 100%;
+  background-color: #f9fafb;
+  padding: 0;
+}
+
+/* Ensure full width and proper spacing */
+.alumni-directory-wrapper > *,
+.job-board-wrapper > * {
+  width: 100%;
+  max-width: none;
+}
+
+/* Fix container padding issues */
+.alumni-directory-wrapper .container,
+.job-board-wrapper .container {
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Improve grid layouts */
+.alumni-directory-wrapper .grid,
+.job-board-wrapper .grid {
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Fix any absolute positioning issues */
+.alumni-directory-wrapper [class*="absolute"],
+.job-board-wrapper [class*="absolute"] {
+  position: relative;
+}
+
+.alumni-directory-wrapper .card,
+.job-board-wrapper .card {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  width: 100%;
+}
+
+.alumni-directory-wrapper .content-padding,
+.job-board-wrapper .content-padding {
+  padding: 1.5rem;
+}
+
+.alumni-directory-wrapper .heading-secondary,
+.job-board-wrapper .heading-secondary {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.alumni-directory-wrapper .text-body,
+.job-board-wrapper .text-body {
+  color: #4b5563;
+}
+
+.alumni-directory-wrapper .glass-soft,
+.job-board-wrapper .glass-soft {
+  background-color: #f9fafb;
+  backdrop-filter: blur(10px);
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+}
+
+.alumni-directory-wrapper .shadow-glow,
+.job-board-wrapper .shadow-glow {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.alumni-directory-wrapper .btn-primary,
+.job-board-wrapper .btn-primary {
+  background-color: #9333ea;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.alumni-directory-wrapper .btn-primary:hover,
+.job-board-wrapper .btn-primary:hover {
+  background-color: #7c3aed;
+}
+
+.alumni-directory-wrapper .btn-secondary,
+.job-board-wrapper .btn-secondary {
+  background-color: #e5e7eb;
+  color: #1f2937;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.alumni-directory-wrapper .btn-secondary:hover,
+.job-board-wrapper .btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+.alumni-directory-wrapper .btn-ghost,
+.job-board-wrapper .btn-ghost {
+  background-color: transparent;
+  color: #4b5563;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.alumni-directory-wrapper .btn-ghost:hover,
+.job-board-wrapper .btn-ghost:hover {
+  background-color: #f3f4f6;
+}
+
+.alumni-directory-wrapper .input-primary,
+.job-board-wrapper .input-primary {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: #1f2937;
+  outline: none;
+}
+
+.alumni-directory-wrapper .input-primary:focus,
+.job-board-wrapper .input-primary:focus {
+  box-shadow: 0 0 0 2px #9333ea;
+  border-color: transparent;
+}
+
+/* Color overrides for better contrast */
+.job-board-wrapper .text-white {
+  color: #1f2937 !important;
+}
+
+.job-board-wrapper .text-white\/90 {
+  color: #374151 !important;
+}
+
+.job-board-wrapper .text-white\/80 {
+  color: #4b5563 !important;
+}
+
+.job-board-wrapper .text-white\/60 {
+  color: #6b7280 !important;
+}
+
+.job-board-wrapper .bg-white\/10 {
+  background-color: #f3f4f6 !important;
+}
+
+.job-board-wrapper .bg-white\/20 {
+  background-color: #e5e7eb !important;
+}
+
+.job-board-wrapper .border-white\/10 {
+  border-color: #e5e7eb !important;
+}
+
+.job-board-wrapper .border-white\/20 {
+  border-color: #d1d5db !important;
+}
+
+/* Specific component improvements */
+.alumni-directory-wrapper .primary-500,
+.job-board-wrapper .primary-500 {
+  color: #9333ea !important;
+}
+
+.alumni-directory-wrapper .secondary-600,
+.job-board-wrapper .secondary-600 {
+  color: #2563eb !important;
+}
+
+/* Better spacing for grid layouts */
+.alumni-directory-wrapper .grid,
+.job-board-wrapper .grid {
+  gap: 1.5rem;
+}
+
+/* Improved card hover effects */
+.alumni-directory-wrapper .card:hover,
+.job-board-wrapper .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Better text contrast for dark themes in components */
+.job-board-wrapper [class*="text-blue-"],
+.job-board-wrapper [class*="text-green-"],
+.job-board-wrapper [class*="text-red-"],
+.job-board-wrapper [class*="text-purple-"],
+.job-board-wrapper [class*="text-orange-"] {
+  filter: saturate(1.2) brightness(0.9);
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .alumni-directory-wrapper,
+  .job-board-wrapper {
+    padding: 1rem;
+  }
+
+  .alumni-directory-wrapper .grid,
+  .job-board-wrapper .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Fix any overflow issues */
+.alumni-directory-wrapper,
+.job-board-wrapper {
+  overflow-x: hidden;
+}
+
+/* Ensure proper text alignment */
+.alumni-directory-wrapper *,
+.job-board-wrapper * {
+  text-align: left;
+}
+
+.alumni-directory-wrapper .text-center,
+.job-board-wrapper .text-center {
+  text-align: center !important;
+}
+
+/* Improve button spacing */
+.alumni-directory-wrapper .flex,
+.job-board-wrapper .flex {
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.alumni-directory-wrapper .justify-center,
+.job-board-wrapper .justify-center {
+  justify-content: center !important;
+}
+
+.alumni-directory-wrapper .justify-between,
+.job-board-wrapper .justify-between {
+  justify-content: space-between !important;
+}
