@@ -122,19 +122,19 @@ const StudentDashboard: React.FC = () => {
   };
 
   const tabs = [
-    { id: 'profile', name: 'My Profile', icon: User },
-    { id: 'activity', name: 'My Activity', icon: Activity },
-    { id: 'attendance', name: 'My Attendance', icon: Calendar },
-    { id: 'resume', name: 'Resume Manager', icon: FileText },
-    { id: 'password', name: 'Change Password', icon: Lock },
-    { id: 'ai-assessment', name: 'Practice with AI', icon: Brain },
-    { id: 'class-assessments', name: 'Class Assessments', icon: FileText },
-    { id: 'task-management', name: 'Task Management', icon: CheckSquare },
-    { id: 'events', name: 'Events', icon: Calendar },
-    { id: 'job-board', name: 'Job Board', icon: Briefcase },
-    { id: 'alumni-directory', name: 'Alumni Network', icon: GraduationCap },
-    { id: 'ai-chat', name: 'AI Chatbot', icon: MessageCircle },
-    { id: 'user-chat', name: 'Messages', icon: Users },
+    { id: 'profile', name: 'My Profile', icon: User, color: 'from-blue-500 to-blue-600' },
+    { id: 'activity', name: 'My Activity', icon: Activity, color: 'from-green-500 to-green-600' },
+    { id: 'attendance', name: 'My Attendance', icon: Calendar, color: 'from-purple-500 to-purple-600' },
+    { id: 'resume', name: 'Resume Manager', icon: FileText, color: 'from-orange-500 to-orange-600' },
+    { id: 'password', name: 'Change Password', icon: Lock, color: 'from-red-500 to-red-600' },
+    { id: 'ai-assessment', name: 'Practice with AI', icon: Brain, color: 'from-indigo-500 to-indigo-600' },
+    { id: 'class-assessments', name: 'Class Assessments', icon: FileText, color: 'from-cyan-500 to-cyan-600' },
+    { id: 'task-management', name: 'Task Management', icon: CheckSquare, color: 'from-pink-500 to-pink-600' },
+    { id: 'events', name: 'Events', icon: Calendar, color: 'from-teal-500 to-teal-600' },
+    { id: 'job-board', name: 'Job Board', icon: Briefcase, color: 'from-amber-500 to-amber-600' },
+    { id: 'alumni-directory', name: 'Alumni Network', icon: GraduationCap, color: 'from-violet-500 to-violet-600' },
+    { id: 'ai-chat', name: 'AI Chatbot', icon: MessageCircle, color: 'from-emerald-500 to-emerald-600' },
+    { id: 'user-chat', name: 'Messages', icon: Users, color: 'from-rose-500 to-rose-600' },
   ];
 
   const renderActiveComponent = () => {
@@ -142,7 +142,7 @@ const StudentDashboard: React.FC = () => {
       case 'profile':
         return <StudentProfile />;
       case 'activity':
-    return <ActivityHeatmap showTitle={true} userId={user?.id} userName={user?.name} />;
+        return <ActivityHeatmap showTitle={true} userId={user?.id} userName={user?.name} />;
       case 'attendance':
         return <StudentAttendanceView />;
       case 'resume':
@@ -172,97 +172,139 @@ const StudentDashboard: React.FC = () => {
 
   return (
     <Layout title="Student Dashboard">
-      <div className="space-y-6">
-        {/* Welcome Section */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-white shadow-xl">
-          <div className="flex items-center space-x-4">
-            <div className="h-12 w-12 bg-gradient-to-r from-purple-500 to-blue-600 rounded-xl flex items-center justify-center">
-              <GraduationCap className="h-6 w-6 text-white" />
+      <div className="space-y-8">
+        {/* Enhanced Welcome Section */}
+        <div className="card content-padding animate-slide-up">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
+            <div className="h-16 w-16 bg-gradient-to-br from-primary-500 to-secondary-600 rounded-2xl flex items-center justify-center shadow-glow animate-pulse-glow">
+              <GraduationCap className="h-8 w-8 text-white" />
             </div>
-            <div>
-              <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.name}!</h2>
-              <p className="text-blue-200">
-                Ready to enhance your learning with AI-powered assessments, connect with alumni, and achieve your career goals.
+            <div className="flex-1">
+              <h2 className="heading-secondary mb-3">Welcome back, {user?.name}!</h2>
+              <p className="text-body max-w-2xl">
+                Ready to enhance your learning journey with AI-powered assessments, connect with industry professionals, 
+                and unlock new career opportunities in the technology sector.
               </p>
+            </div>
+            <div className="flex items-center space-x-2 text-sm text-white/70">
+              <div className="status-success"></div>
+              <span>Online</span>
             </div>
           </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl overflow-hidden">
-          <nav className="flex space-x-0 overflow-x-auto">
-            {tabs.map((tab, index) => {
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`whitespace-nowrap py-4 px-4 font-medium text-sm flex items-center space-x-2 transition-all duration-300 flex-shrink-0 ${
-                    activeTab === tab.id
-                      ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-lg'
-                      : 'text-blue-200 hover:text-white hover:bg-white/10'
-                  } ${index === 0 ? 'rounded-tl-2xl' : ''} ${index === tabs.length - 1 ? 'rounded-tr-2xl' : ''}`}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span className="hidden sm:block">{tab.name}</span>
-                </button>
-              );
-            })}
+        {/* Enhanced Navigation Tabs */}
+        <div className="card overflow-hidden animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <nav className="flex overflow-x-auto mobile-scroll">
+            <div className="flex space-x-1 p-2 min-w-max">
+              {tabs.map((tab, index) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center space-x-2 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-300 whitespace-nowrap transform hover:scale-105 min-w-0 ${
+                      isActive
+                        ? `bg-gradient-to-r ${tab.color} text-white shadow-glow`
+                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 flex-shrink-0" />
+                    <span className="hidden sm:block truncate">{tab.name}</span>
+                  </button>
+                );
+              })}
+            </div>
           </nav>
         </div>
 
-        {/* Quick Stats */}
+        {/* Enhanced Quick Stats */}
         {activeTab === 'profile' && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-xl p-6 text-center hover:bg-white/15 transition-all duration-300 group">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                <Brain className="h-6 w-6 text-white" />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <div className="card-interactive content-padding group">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-glow">
+                  <Brain className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-right">
+                  <p className="text-3xl font-bold text-white group-hover:text-blue-300 transition-colors">
+                    {loading ? (
+                      <div className="loading-spinner w-8 h-8"></div>
+                    ) : (
+                      stats.aiAssessments
+                    )}
+                  </p>
+                  <p className="text-sm text-white/60">Completed</p>
+                </div>
               </div>
-              <h3 className="font-semibold mb-1 text-white">AI Assessments</h3>
-              <p className="text-2xl font-bold text-blue-400">
-                {loading ? '...' : stats.aiAssessments}
-              </p>
-              <p className="text-sm text-blue-200">Completed</p>
+              <h3 className="font-semibold text-white mb-2">AI Assessments</h3>
             </div>
             
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-xl p-6 text-center hover:bg-white/15 transition-all duration-300 group">
-              <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                <FileText className="h-6 w-6 text-white" />
+            <div className="card-interactive content-padding group">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-glow">
+                  <FileText className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-right">
+                  <p className="text-3xl font-bold text-white group-hover:text-green-300 transition-colors">
+                    {loading ? (
+                      <div className="loading-spinner w-8 h-8"></div>
+                    ) : (
+                      stats.classTests
+                    )}
+                  </p>
+                  <p className="text-sm text-white/60">This Semester</p>
+                </div>
               </div>
-              <h3 className="font-semibold mb-1 text-white">Class Tests</h3>
-              <p className="text-2xl font-bold text-green-400">
-                {loading ? '...' : stats.classTests}
-              </p>
-              <p className="text-sm text-blue-200">This Semester</p>
+              <h3 className="font-semibold text-white mb-2">Class Tests</h3>
             </div>
             
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-xl p-6 text-center hover:bg-white/15 transition-all duration-300 group">
-              <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                <CheckSquare className="h-6 w-6 text-white" />
+            <div className="card-interactive content-padding group">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-glow">
+                  <CheckSquare className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-right">
+                  <p className="text-3xl font-bold text-white group-hover:text-purple-300 transition-colors">
+                    {loading ? (
+                      <div className="loading-spinner w-8 h-8"></div>
+                    ) : (
+                      stats.activeTasks
+                    )}
+                  </p>
+                  <p className="text-sm text-white/60">Active Goals</p>
+                </div>
               </div>
-              <h3 className="font-semibold mb-1 text-white">Tasks</h3>
-              <p className="text-2xl font-bold text-purple-400">
-                {loading ? '...' : stats.activeTasks}
-              </p>
-              <p className="text-sm text-blue-200">Active Goals</p>
+              <h3 className="font-semibold text-white mb-2">Tasks</h3>
             </div>
             
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-xl p-6 text-center hover:bg-white/15 transition-all duration-300 group">
-              <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                <GraduationCap className="h-6 w-6 text-white" />
+            <div className="card-interactive content-padding group">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-glow">
+                  <GraduationCap className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-right">
+                  <p className="text-3xl font-bold text-white group-hover:text-orange-300 transition-colors">
+                    {loading ? (
+                      <div className="loading-spinner w-8 h-8"></div>
+                    ) : (
+                      stats.alumniConnections
+                    )}
+                  </p>
+                  <p className="text-sm text-white/60">Connected</p>
+                </div>
               </div>
-              <h3 className="font-semibold mb-1 text-white">Connections</h3>
-              <p className="text-2xl font-bold text-orange-400">
-                {loading ? '...' : stats.alumniConnections}
-              </p>
-              <p className="text-sm text-blue-200">Connected</p>
+              <h3 className="font-semibold text-white mb-2">Connections</h3>
             </div>
           </div>
         )}
 
-        {/* Active Component */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl p-6">
-          {renderActiveComponent()}
+        {/* Enhanced Active Component Container */}
+        <div className="card content-padding animate-scale-in" style={{ animationDelay: '0.3s' }}>
+          <div className="min-h-[400px]">
+            {renderActiveComponent()}
+          </div>
         </div>
       </div>
     </Layout>

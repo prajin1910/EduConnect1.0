@@ -126,7 +126,7 @@ const AlumniEventRequest: React.FC<AlumniEventRequestProps> = () => {
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Request Event from Management</h1>
+            <h1 className="text-3xl font-bold text-white mb-2">Request Event from Management</h1>
             <p className="text-gray-600">
               Submit a request to organize an event that will benefit students and the academic community
             </p>

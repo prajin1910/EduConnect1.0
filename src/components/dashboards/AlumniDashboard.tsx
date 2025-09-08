@@ -7,7 +7,6 @@ import {
   MessageSquare,
   Plus,
   RefreshCw,
-  TrendingUp,
   User,
   UserCheck,
   Users
@@ -127,102 +126,7 @@ const AlumniDashboard: React.FC = () => {
 
     switch (activeTab) {
       case 'profile':
-        return (
-          <div className="space-y-3">
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg p-3 shadow-md">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-sm font-bold text-white">Your Profile</h2>
-                <button
-                  onClick={() => loadStats(true)}
-                  disabled={statsLoading}
-                  className="inline-flex items-center px-2 py-1 bg-white/10 backdrop-blur-sm border border-white/20 rounded-md text-xs font-medium text-white hover:bg-white/20 transition-all duration-300"
-                >
-                  <RefreshCw className={`h-3 w-3 mr-1 ${statsLoading ? 'animate-spin' : ''}`} />
-                  {statsLoading ? 'Refreshing' : 'Refresh'}
-                </button>
-              </div>
-              <p className="text-blue-200 text-xs">Manage your professional information.</p>
-            </div>
-            
-            <AlumniProfileNew />
-            
-            {/* Ultra Compact Stats */}
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg shadow-md p-3">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-sm font-bold text-white flex items-center">
-                  <TrendingUp className="h-3 w-3 text-blue-400 mr-1" />
-                  Impact
-                </h2>
-                {error && (
-                  <div className="text-xs text-red-300 bg-red-500/20 px-2 py-1 rounded border border-red-500/30">
-                    Error
-                  </div>
-                )}
-              </div>
-              
-              <div className="grid grid-cols-3 gap-2">
-                {/* Network */}
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-md p-2 text-center">
-                  <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-blue-600 rounded-md flex items-center justify-center mx-auto mb-1">
-                    <Users className="h-3 w-3 text-white" />
-                  </div>
-                  {statsLoading ? (
-                    <div className="w-4 h-4 bg-white/20 rounded animate-pulse mx-auto"></div>
-                  ) : (
-                    <>
-                      <p className="text-sm font-bold text-white">{stats.networkConnections}</p>
-                      <p className="text-xs text-blue-200">Network</p>
-                    </>
-                  )}
-                </div>
-                
-                {/* Events */}
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-md p-2 text-center">
-                  <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-green-600 rounded-md flex items-center justify-center mx-auto mb-1">
-                    <Calendar className="h-3 w-3 text-white" />
-                  </div>
-                  {statsLoading ? (
-                    <div className="w-4 h-4 bg-white/20 rounded animate-pulse mx-auto"></div>
-                  ) : (
-                    <>
-                      <p className="text-sm font-bold text-white">{stats.eventsCount}</p>
-                      <p className="text-xs text-blue-200">Events</p>
-                    </>
-                  )}
-                </div>
-                
-                {/* Jobs */}
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-md p-2 text-center">
-                  <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-purple-600 rounded-md flex items-center justify-center mx-auto mb-1">
-                    <Briefcase className="h-3 w-3 text-white" />
-                  </div>
-                  {statsLoading ? (
-                    <div className="w-4 h-4 bg-white/20 rounded animate-pulse mx-auto"></div>
-                  ) : (
-                    <>
-                      <p className="text-sm font-bold text-white">{stats.jobsPosted}</p>
-                      <p className="text-xs text-blue-200">Jobs</p>
-                    </>
-                  )}
-                </div>
-              </div>
-              
-              {/* Mini Achievement */}
-              <div className="mt-3 p-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-md">
-                <div className="flex items-center space-x-1">
-                  <Award className="h-3 w-3 text-amber-400" />
-                  <h3 className="text-xs font-semibold text-white">Achievements</h3>
-                </div>
-                <p className="text-blue-200 text-xs">
-                  {stats.networkConnections > 10 && "🌟 "}
-                  {stats.eventsCount > 3 && "🎯 "}
-                  {stats.jobsPosted > 5 && "💼 "}
-                  Active contributor!
-                </p>
-              </div>
-            </div>
-          </div>
-        );
+        return <AlumniProfileNew />;
       case 'directory':
         return <AlumniDirectoryNew />;
       case 'connections':
@@ -246,48 +150,172 @@ const AlumniDashboard: React.FC = () => {
 
   return (
     <Layout title="Alumni Dashboard">
-      <div className="space-y-2 px-1 sm:px-2">
-        {/* Compact Welcome Section */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg p-3 text-white shadow-md">
-          <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 bg-gradient-to-r from-amber-500 to-orange-600 rounded-md flex items-center justify-center">
-              <GraduationCap className="h-4 w-4 text-white" />
+      <div className="space-y-8">
+        {/* Enhanced Welcome Section */}
+        <div className="card content-padding animate-slide-up">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between space-y-6 lg:space-y-0">
+            <div className="flex items-center space-x-6">
+              <div className="h-16 w-16 bg-gradient-to-br from-primary-500 to-secondary-600 rounded-2xl flex items-center justify-center shadow-glow animate-pulse-glow">
+                <GraduationCap className="h-8 w-8 text-white" />
+              </div>
+              <div className="flex-1">
+                <h2 className="heading-secondary mb-3">Welcome back, {user?.name}!</h2>
+                <p className="text-body max-w-2xl">
+                  Manage your professional network, share career opportunities, and mentor the next generation of technology professionals.
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-sm font-bold">Welcome, {user?.name}!</h2>
-              <p className="text-blue-200 text-xs">
-                Manage your network and opportunities.
-              </p>
+            
+            {/* Quick Actions */}
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => loadStats(true)}
+                disabled={statsLoading}
+                className="btn-secondary flex items-center space-x-2"
+              >
+                <RefreshCw className={`h-4 w-4 ${statsLoading ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">{statsLoading ? 'Refreshing' : 'Refresh'}</span>
+              </button>
+              <div className="flex items-center space-x-2 text-sm text-white/70">
+                <div className="status-success"></div>
+                <span>Active Alumni</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Compact Navigation Tabs */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg shadow-md overflow-hidden">
-          <nav className="flex space-x-0 overflow-x-auto">
-            {tabs.map((tab, index) => {
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`whitespace-nowrap py-2 px-2 font-medium text-xs flex items-center space-x-1 transition-all duration-300 flex-shrink-0 ${
-                    activeTab === tab.id
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md'
-                      : 'text-blue-200 hover:text-white hover:bg-white/10'
-                  } ${index === 0 ? 'rounded-tl-lg' : ''} ${index === tabs.length - 1 ? 'rounded-tr-lg' : ''}`}
-                >
-                  <Icon className="h-3 w-3" />
-                  <span className="hidden sm:block text-xs">{tab.name}</span>
-                </button>
-              );
-            })}
+        {/* Enhanced Navigation Tabs */}
+        <div className="card overflow-hidden animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <nav className="flex overflow-x-auto mobile-scroll">
+            <div className="flex space-x-2 p-2 min-w-max">
+              {tabs.map((tab, index) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center space-x-3 px-6 py-4 rounded-xl font-medium text-sm transition-all duration-300 whitespace-nowrap transform hover:scale-105 ${
+                      isActive
+                        ? 'bg-gradient-to-r from-primary-500 to-secondary-600 text-white shadow-glow'
+                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    <span className="hidden sm:block">{tab.name}</span>
+                  </button>
+                );
+              })}
+            </div>
           </nav>
         </div>
 
-        {/* Compact Active Component */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg shadow-md p-3">
-          {renderActiveComponent()}
+        {/* Enhanced Quick Stats */}
+        {activeTab === 'profile' && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <div className="card-interactive content-padding group">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-glow">
+                  <Users className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-right">
+                  <p className="text-3xl font-bold text-white group-hover:text-blue-300 transition-colors">
+                    {statsLoading ? (
+                      <div className="loading-spinner w-8 h-8"></div>
+                    ) : (
+                      stats.networkConnections
+                    )}
+                  </p>
+                  <p className="text-sm text-white/60">Connections</p>
+                </div>
+              </div>
+              <h3 className="font-semibold text-white mb-2">Professional Network</h3>
+              <p className="text-xs text-white/60 mt-2">Building professional relationships</p>
+            </div>
+            
+            <div className="card-interactive content-padding group">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-glow">
+                  <Calendar className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-right">
+                  <p className="text-3xl font-bold text-white group-hover:text-green-300 transition-colors">
+                    {statsLoading ? (
+                      <div className="loading-spinner w-8 h-8"></div>
+                    ) : (
+                      stats.eventsCount
+                    )}
+                  </p>
+                  <p className="text-sm text-white/60">Events</p>
+                </div>
+              </div>
+              <h3 className="font-semibold text-white mb-2">Event Participation</h3>
+              <p className="text-xs text-white/60 mt-2">Community engagement</p>
+            </div>
+            
+            <div className="card-interactive content-padding group">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-glow">
+                  <Briefcase className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-right">
+                  <p className="text-3xl font-bold text-white group-hover:text-purple-300 transition-colors">
+                    {statsLoading ? (
+                      <div className="loading-spinner w-8 h-8"></div>
+                    ) : (
+                      stats.jobsPosted
+                    )}
+                  </p>
+                  <p className="text-sm text-white/60">Jobs Posted</p>
+                </div>
+              </div>
+              <h3 className="font-semibold text-white mb-2">Career Opportunities</h3>
+              <p className="text-xs text-white/60 mt-2">Helping others succeed</p>
+            </div>
+
+            {/* Achievement Summary */}
+            <div className="col-span-full">
+              <div className="card content-padding">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Award className="h-6 w-6 text-amber-400" />
+                  <h3 className="text-lg font-semibold text-white">Impact Summary</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                  <div className="glass-soft rounded-xl p-4 border border-white/10">
+                    <div className="text-2xl font-bold text-amber-300 mb-1">
+                      {stats.networkConnections + stats.jobsPosted + stats.eventsCount}
+                    </div>
+                    <div className="text-sm text-white/70">Total Contributions</div>
+                  </div>
+                  <div className="glass-soft rounded-xl p-4 border border-white/10">
+                    <div className="text-2xl font-bold text-green-300 mb-1">
+                      {stats.networkConnections > 10 ? 'Active' : 'Growing'}
+                    </div>
+                    <div className="text-sm text-white/70">Network Status</div>
+                  </div>
+                  <div className="glass-soft rounded-xl p-4 border border-white/10">
+                    <div className="text-2xl font-bold text-blue-300 mb-1">
+                      {stats.jobsPosted > 5 ? 'Mentor' : 'Supporter'}
+                    </div>
+                    <div className="text-sm text-white/70">Community Role</div>
+                  </div>
+                </div>
+                
+                {error && (
+                  <div className="mt-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg">
+                    <p className="text-red-300 text-sm">Unable to load some statistics. Please try refreshing.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Enhanced Active Component Container */}
+        <div className="card content-padding animate-scale-in" style={{ animationDelay: '0.3s' }}>
+          <div className="min-h-[400px]">
+            {renderActiveComponent()}
+          </div>
         </div>
       </div>
     </Layout>

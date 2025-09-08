@@ -1,4 +1,4 @@
-import { Calendar, Clock, FileText, TrendingDown, TrendingUp, User } from 'lucide-react';
+import { Calendar, Clock, TrendingDown, TrendingUp, User } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
@@ -106,10 +106,9 @@ const StudentAttendanceView: React.FC = () => {
 
   if (!attendanceSummary) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border p-8 text-center">
-        <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No Attendance Data</h3>
-        <p className="text-gray-600">Your attendance records will appear here once professors start taking attendance.</p>
+            <div className="text-center py-12">
+        <h3 className="text-lg font-medium text-white mb-2">No Attendance Data</h3>
+        <p className="text-gray-600">No attendance records found.</p>
       </div>
     );
   }
@@ -317,7 +316,7 @@ const StudentAttendanceView: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Monthly Trend */}
           <div className="space-y-3">
-            <h4 className="font-medium text-gray-900">Monthly Performance</h4>
+            <h4 className="font-medium text-white">Monthly Performance</h4>
             <div className="space-y-2">
               {Array.from({ length: 6 }, (_, i) => {
                 const monthDate = new Date();
@@ -352,7 +351,7 @@ const StudentAttendanceView: React.FC = () => {
 
           {/* Attendance Tips */}
           <div className="space-y-3">
-            <h4 className="font-medium text-gray-900">Attendance Guidelines</h4>
+            <h4 className="font-medium text-white">Attendance Guidelines</h4>
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2 p-2 bg-green-50 rounded">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>

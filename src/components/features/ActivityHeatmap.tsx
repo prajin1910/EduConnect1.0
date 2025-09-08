@@ -1,4 +1,4 @@
-import { Activity, Calendar, MessageCircle, User } from 'lucide-react';
+import { Activity } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
@@ -26,6 +26,7 @@ const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
   const [loading, setLoading] = useState(true);
   const [hoveredDate, setHoveredDate] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [tooltipRef, setTooltipRef] = useState<HTMLDivElement | null>(null);
 
   const targetUserId = userId || user?.id;
   const targetUserName = userName || user?.name;
@@ -112,11 +113,24 @@ const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
 
   const handleMouseEnter = (date: string, event: React.MouseEvent) => {
     setHoveredDate(date);
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    setTooltipPosition({
-      x: rect.left + rect.width / 2,
-      y: rect.top - 10
-    });
+    
+    const target = event.target as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    const containerRect = target.closest('.space-y-6')?.getBoundingClientRect();
+    
+    if (containerRect) {
+      // Position relative to the main container
+      setTooltipPosition({
+        x: rect.left - containerRect.left + rect.width / 2,
+        y: rect.top - containerRect.top - 10
+      });
+    } else {
+      // Fallback to viewport positioning
+      setTooltipPosition({
+        x: rect.left + rect.width / 2,
+        y: rect.top - 10
+      });
+    }
   };
 
   const handleMouseLeave = () => {
@@ -135,9 +149,9 @@ const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
 
   if (!heatmapData) {
     return (
-      <div className="bg-gray-50 rounded-lg p-6 text-center">
-        <Activity className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-        <p className="text-gray-600">No activity data available</p>
+      <div className="glass-soft rounded-lg p-6 text-center border border-white/10">
+        <Activity className="h-12 w-12 text-white/50 mx-auto mb-3" />
+        <p className="text-white/70">No activity data available</p>
       </div>
     );
   }
@@ -152,43 +166,43 @@ const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
       {showTitle && (
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-semibold flex items-center space-x-2">
-              <Activity className="h-5 w-5 text-green-600" />
+            <h3 className="text-lg font-semibold flex items-center space-x-2 text-white">
+              <Activity className="h-5 w-5 text-green-400" />
               <span>Activity Heatmap</span>
-              {targetUserName && <span className="text-gray-600">- {targetUserName}</span>}
+              {targetUserName && <span className="text-white/80">- {targetUserName}</span>}
             </h3>
-            <p className="text-sm text-gray-600">Daily activity over the past year</p>
+            <p className="text-sm text-white/70">Daily activity over the past year</p>
           </div>
         </div>
       )}
 
       {/* Statistics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-blue-50 p-3 rounded-lg text-center">
-          <div className="text-2xl font-bold text-blue-600">{totalActivities}</div>
-          <div className="text-xs text-gray-600">Total Activities</div>
+        <div className="glass-soft p-3 rounded-lg text-center border border-white/10">
+          <div className="text-2xl font-bold text-blue-400">{totalActivities}</div>
+          <div className="text-xs text-white/70">Total Activities</div>
         </div>
-        <div className="bg-green-50 p-3 rounded-lg text-center">
-          <div className="text-2xl font-bold text-green-600">{activeDays}</div>
-          <div className="text-xs text-gray-600">Active Days</div>
+        <div className="glass-soft p-3 rounded-lg text-center border border-white/10">
+          <div className="text-2xl font-bold text-green-400">{activeDays}</div>
+          <div className="text-xs text-white/70">Active Days</div>
         </div>
-        <div className="bg-purple-50 p-3 rounded-lg text-center">
-          <div className="text-2xl font-bold text-purple-600">{maxDaily}</div>
-          <div className="text-xs text-gray-600">Max Daily</div>
+        <div className="glass-soft p-3 rounded-lg text-center border border-white/10">
+          <div className="text-2xl font-bold text-purple-400">{maxDaily}</div>
+          <div className="text-xs text-white/70">Max Daily</div>
         </div>
-        <div className="bg-yellow-50 p-3 rounded-lg text-center">
-          <div className="text-2xl font-bold text-yellow-600">{avgDaily.toFixed(1)}</div>
-          <div className="text-xs text-gray-600">Daily Average</div>
+        <div className="glass-soft p-3 rounded-lg text-center border border-white/10">
+          <div className="text-2xl font-bold text-yellow-400">{avgDaily.toFixed(1)}</div>
+          <div className="text-xs text-white/70">Daily Average</div>
         </div>
       </div>
 
       {/* Heatmap */}
-      <div className="bg-white border rounded-lg p-4">
+      <div className="glass-soft border border-white/10 rounded-lg p-4">
         <div className="flex items-center justify-between mb-4">
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-white/80">
             {totalActivities} activities in the last year
           </div>
-          <div className="flex items-center space-x-2 text-xs text-gray-500">
+          <div className="flex items-center space-x-2 text-xs text-white/70">
             <span>Less</span>
             <div className="flex space-x-1">
               <div className="w-3 h-3 bg-gray-100 rounded-sm border border-gray-200"></div>
@@ -202,9 +216,9 @@ const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
         </div>
 
         <div className="overflow-x-auto">
-          <div className="flex">
+          <div className="flex min-w-fit">
             {/* Day labels */}
-            <div className="flex flex-col justify-between mr-2 text-xs text-gray-500 h-24">
+            <div className="flex flex-col justify-between mr-2 text-xs text-white/70 h-24 pt-6">
               <div></div>
               <div>Mon</div>
               <div></div>
@@ -215,9 +229,9 @@ const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
             </div>
 
             {/* Calendar grid */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               {/* Month labels */}
-              <div className="flex mb-2">
+              <div className="flex mb-2 h-6">
                 {generateCalendarGrid().map((week, weekIndex) => {
                   const firstDay = week.find(day => day !== null);
                   if (!firstDay) return <div key={weekIndex} className="w-3 mr-1"></div>;
@@ -226,7 +240,7 @@ const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
                   const isFirstWeekOfMonth = date.getDate() <= 7;
                   
                   return (
-                    <div key={weekIndex} className="w-3 mr-1 text-xs text-gray-500">
+                    <div key={weekIndex} className="w-3 mr-1 text-xs text-white/70 flex items-start">
                       {isFirstWeekOfMonth ? monthLabels[date.getMonth()] : ''}
                     </div>
                   );
@@ -264,14 +278,15 @@ const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
       {/* GitHub-style Tooltip */}
       {hoveredDate && (
         <div 
-          className="fixed z-50 pointer-events-none"
+          ref={setTooltipRef}
+          className="absolute z-50 pointer-events-none"
           style={{
             left: tooltipPosition.x,
             top: tooltipPosition.y,
             transform: 'translate(-50%, -100%)'
           }}
         >
-          <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg border border-gray-700 max-w-xs">
+          <div className="bg-gray-900/95 backdrop-blur-sm text-white text-xs rounded-lg p-3 shadow-xl border border-gray-700 max-w-xs">
             <div className="font-semibold text-white mb-1">
               {new Date(hoveredDate).toLocaleDateString('en-US', { 
                 weekday: 'short', 
@@ -291,7 +306,7 @@ const ActivityHeatmap: React.FC<ActivityHeatmapProps> = ({
                   <div className="text-green-400 font-medium">
                     {breakdown.total} {breakdown.total === 1 ? 'activity' : 'activities'}
                   </div>
-                  <div className="space-y-1 border-t border-gray-700 pt-1">
+                  <div className="space-y-1 border-t border-gray-700 pt-1 mt-2">
                     {breakdown.breakdown.map((activity, index) => (
                       <div key={index} className="flex items-center justify-between text-xs">
                         <span className="flex items-center space-x-1">

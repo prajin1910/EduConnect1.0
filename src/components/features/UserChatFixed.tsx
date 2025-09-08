@@ -99,12 +99,9 @@ const UserChat: React.FC = React.memo(() => {
 
     setIsSearching(true);
     try {
-      // Instead of making a new API call, search within the existing allUsers data
-      // which already includes data from both User table and Alumni table
       filterUsers();
     } catch (error: any) {
       console.error("Search failed:", error);
-      // Fallback to local filtering
       filterUsers();
     } finally {
       setIsSearching(false);
@@ -113,7 +110,6 @@ const UserChat: React.FC = React.memo(() => {
 
   const loadInitialData = async () => {
     try {
-      // Load all conversations and users
       await Promise.all([loadConversations(), loadAllUsers()]);
     } catch (error: any) {
       showToast(error.message || "Failed to load chat data", "error");
@@ -128,12 +124,6 @@ const UserChat: React.FC = React.memo(() => {
       setConversations(response);
     } catch (error: any) {
       console.error("UserChat: Failed to load conversations:", error);
-      console.error("UserChat: Conversation error details:", {
-        message: error.message,
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-      });
       setConversations([]);
     }
   };
@@ -141,34 +131,17 @@ const UserChat: React.FC = React.memo(() => {
   const loadAllUsers = async () => {
     try {
       console.log("UserChat: Starting to load all users...");
-      console.log("UserChat: Making API call to /chat/users");
-
       const response = await chatAPI.getAllUsers();
       console.log("UserChat: Users loaded successfully:", response.length);
-      console.log("UserChat: Sample users:", response.slice(0, 3));
-      console.log(
-        "UserChat: User roles breakdown:",
-        response.reduce((acc: any, user: ChatUser) => {
-          acc[user.role] = (acc[user.role] || 0) + 1;
-          return acc;
-        }, {})
-      );
       setAllUsers(response);
     } catch (error: any) {
       console.error("UserChat: Failed to load users:", error);
-      console.error("UserChat: Error details:", {
-        message: error.message,
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-      });
       setAllUsers([]);
       showToast("Failed to load users for chat", "error");
     }
   };
 
   const filterUsers = () => {
-    // Get current user ID to filter out
     const currentUserId = getCurrentUserId();
     let filtered = allUsers.filter((user) => user.id !== currentUserId);
 
@@ -176,10 +149,7 @@ const UserChat: React.FC = React.memo(() => {
       "UserChat: Filtering users. Total before filter:",
       filtered.length
     );
-    console.log("UserChat: Selected filter:", selectedFilter);
-    console.log("UserChat: Search query:", searchQuery);
 
-    // Filter by role - handle case insensitive comparison
     if (selectedFilter !== "all") {
       const beforeRoleFilter = filtered.length;
       filtered = filtered.filter((user) => {
@@ -192,7 +162,6 @@ const UserChat: React.FC = React.memo(() => {
       );
     }
 
-    // Filter by search query - enhanced search including phone numbers
     if (searchQuery.trim()) {
       const beforeSearchFilter = filtered.length;
       const query = searchQuery.toLowerCase();
@@ -221,15 +190,11 @@ const UserChat: React.FC = React.memo(() => {
     setShowUserDropdown(false);
     setSearchQuery("");
 
-    // Load chat history
     try {
       const response = await chatAPI.getChatHistory(user.id);
       setMessages(response);
 
-      // Mark messages as read
       await chatAPI.markMessagesAsRead(user.id);
-
-      // Update conversations
       loadConversations();
     } catch (error: any) {
       showToast(error.message || "Failed to load chat history", "error");
@@ -251,10 +216,8 @@ const UserChat: React.FC = React.memo(() => {
       setMessages((prev) => [...prev, response]);
       setNewMessage("");
 
-      // Update conversations
       loadConversations();
 
-      // Log activity
       const activityType =
         selectedUser.role === "ALUMNI"
           ? "ALUMNI_CHAT"
@@ -283,21 +246,6 @@ const UserChat: React.FC = React.memo(() => {
     return user.id;
   };
 
-  const getRoleColor = (role: string) => {
-    switch (role.toLowerCase()) {
-      case "student":
-        return "text-blue-600";
-      case "professor":
-        return "text-green-600";
-      case "alumni":
-        return "text-purple-600";
-      case "management":
-        return "text-red-600";
-      default:
-        return "text-gray-600";
-    }
-  };
-
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -309,7 +257,6 @@ const UserChat: React.FC = React.memo(() => {
         minute: "2-digit",
       });
     } else if (diffInHours < 168) {
-      // 7 days
       return date.toLocaleDateString([], { weekday: "short" });
     } else {
       return date.toLocaleDateString([], { month: "short", day: "numeric" });
@@ -360,25 +307,20 @@ const UserChat: React.FC = React.memo(() => {
                     <ChevronDown className="h-5 w-5" />
                   </button>
 
-                  {/* User Dropdown */}
+                  {/* Enhanced User Dropdown */}
                   {showUserDropdown && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white backdrop-blur-sm border border-gray-200 rounded-xl shadow-lg z-50 max-h-80 overflow-hidden">
-                      {/* Search and Filter */}
-                      <div className="p-3 border-b border-gray-200 space-y-2">
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-200 z-50 max-h-80 overflow-hidden">
+                      <div className="p-4">
                         <input
                           type="text"
+                          placeholder="Search users..."
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          placeholder={
-                            isSearching
-                              ? "Searching..."
-                              : "Search by name, email, or phone..."
-                          }
-                          className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-                          disabled={isSearching}
+                          className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-300"
                         />
 
-                        <div className="flex space-x-1">
+                        {/* Filter buttons */}
+                        <div className="flex space-x-2 mt-3">
                           {[
                             "all",
                             "student",
@@ -389,9 +331,9 @@ const UserChat: React.FC = React.memo(() => {
                             <button
                               key={filter}
                               onClick={() => setSelectedFilter(filter)}
-                              className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                              className={`px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
                                 selectedFilter === filter
-                                  ? "bg-blue-600 text-white"
+                                  ? "bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg"
                                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                               }`}
                             >
@@ -401,51 +343,36 @@ const UserChat: React.FC = React.memo(() => {
                         </div>
                       </div>
 
-                      {/* Users List */}
-                      <div className="max-h-60 overflow-y-auto">
-                        {isSearching ? (
-                          <div className="p-4 text-center text-gray-500 text-sm">
-                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto mb-2"></div>
-                            Searching users...
-                          </div>
-                        ) : filteredUsers.length === 0 ? (
-                          <div className="p-4 text-center text-gray-500 text-sm">
-                            {searchQuery.trim()
-                              ? `No users found for "${searchQuery}"`
-                              : "No users found"}
-                            <div className="text-xs text-gray-400 mt-1">
-                              Try searching by name, email, or phone number
-                            </div>
-                          </div>
-                        ) : (
+                      <div className="max-h-48 overflow-y-auto">
+                        {filteredUsers.length > 0 ? (
                           filteredUsers.map((user) => (
                             <button
                               key={user.id}
                               onClick={() => selectUser(user)}
-                              className="w-full text-left p-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                              className="w-full text-left p-4 hover:bg-gradient-to-r hover:from-teal-50 hover:to-cyan-50 transition-all duration-300 border-b border-gray-100 last:border-b-0"
                             >
                               <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
-                                  <User className="h-4 w-4 text-white" />
+                                <div className="w-10 h-10 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
+                                  <User className="h-5 w-5 text-white" />
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="font-medium text-sm truncate">
+                                <div className="flex-1">
+                                  <div className="font-semibold text-gray-900">
                                     {user.name}
-                                  </p>
-                                  <p className="text-xs text-gray-500 truncate">
+                                  </div>
+                                  <div className="text-sm text-teal-600 font-medium">
                                     {user.email}
-                                  </p>
-                                  <p
-                                    className={`text-xs font-medium ${getRoleColor(
-                                      user.role
-                                    )}`}
-                                  >
+                                  </div>
+                                  <div className="text-xs text-gray-500">
                                     {user.role} • {user.department}
-                                  </p>
+                                  </div>
                                 </div>
                               </div>
                             </button>
                           ))
+                        ) : (
+                          <div className="p-4 text-center text-gray-500">
+                            {isSearching ? "Searching..." : "No users found"}
+                          </div>
                         )}
                       </div>
                     </div>
@@ -454,196 +381,156 @@ const UserChat: React.FC = React.memo(() => {
               </div>
             </div>
 
-            {/* Conversations List */}
+            {/* Enhanced Conversations List */}
             <div className="flex-1 overflow-y-auto">
-              {conversations.length === 0 ? (
-                <div className="p-6 text-center text-gray-500">
-                  <MessageCircle className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                  <p className="text-sm font-medium">No conversations yet</p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Start a new chat to begin
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-1 p-2">
-                  {conversations.map((conversation) => (
-                    <button
-                      key={conversation.user.id}
-                      onClick={() => selectUser(conversation.user)}
-                      className={`w-full text-left p-3 rounded-lg transition-colors ${
-                        selectedUser?.id === conversation.user.id
-                          ? "bg-blue-50 border border-blue-200"
-                          : "hover:bg-gray-50"
-                      }`}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className="relative">
-                          <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
-                            <User className="h-5 w-5 text-white" />
-                          </div>
-                          {conversation.unreadCount > 0 && (
-                            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-medium">
-                              {conversation.unreadCount > 9
-                                ? "9+"
-                                : conversation.unreadCount}
-                            </div>
-                          )}
+              {conversations.length > 0 ? (
+                conversations.map((conversation) => (
+                  <button
+                    key={conversation.user.id}
+                    onClick={() => selectUser(conversation.user)}
+                    className={`w-full text-left p-4 border-b border-gray-100 hover:bg-gradient-to-r hover:from-teal-50 hover:to-cyan-50 transition-all duration-300 ${
+                      selectedUser?.id === conversation.user.id
+                        ? "bg-gradient-to-r from-teal-50 to-cyan-50 border-l-4 border-l-teal-500"
+                        : ""
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="relative">
+                        <div className="w-12 h-12 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
+                          <User className="h-6 w-6 text-white" />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <p className="font-medium text-sm truncate">
-                              {conversation.user.name}
-                            </p>
-                            {conversation.lastMessage && (
-                              <p className="text-xs text-gray-500">
-                                {formatTime(conversation.lastMessage.timestamp)}
-                              </p>
-                            )}
+                        {conversation.unreadCount > 0 && (
+                          <div className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold shadow-lg">
+                            {conversation.unreadCount}
                           </div>
-                          <p
-                            className={`text-xs ${getRoleColor(
-                              conversation.user.role
-                            )}`}
-                          >
-                            {conversation.user.role}
-                          </p>
-                          {conversation.lastMessage && (
-                            <p className="text-xs text-gray-500 truncate mt-1">
-                              {conversation.lastMessage.message}
-                            </p>
-                          )}
-                        </div>
+                        )}
                       </div>
-                    </button>
-                  ))}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-semibold text-gray-900 truncate">
+                            {conversation.user.name}
+                          </h4>
+                          {conversation.lastMessage && (
+                            <span className="text-xs text-gray-500 ml-2">
+                              {formatTime(conversation.lastMessage.timestamp)}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-teal-600 font-medium">
+                          {conversation.user.role}
+                        </p>
+                        {conversation.lastMessage && (
+                          <p className="text-sm text-gray-600 truncate mt-1">
+                            {conversation.lastMessage.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                ))
+              ) : (
+                <div className="p-8 text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-gray-100 to-gray-200 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                    <MessageCircle className="h-8 w-8 text-gray-400" />
+                  </div>
+                  <h4 className="font-semibold text-gray-600 mb-2">
+                    No Conversations
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    Start a new chat to begin messaging
+                  </p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Chat Panel */}
-          <div className="lg:col-span-2">
+          {/* Enhanced Chat Area */}
+          <div className="lg:col-span-2 flex flex-col">
             {selectedUser ? (
-              <div className="bg-white flex flex-col h-full">
-                {/* Chat Header */}
-                <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-teal-50 to-cyan-50">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-full flex items-center justify-center">
-                      <User className="h-6 w-6 text-white" />
+              <>
+                {/* Enhanced Chat Header */}
+                <div className="bg-gradient-to-r from-teal-500 to-cyan-500 p-6 text-white">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
+                      <User className="h-6 w-6" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-800 truncate">
-                        {selectedUser.name}
-                      </h3>
-                      <p className="text-sm text-gray-600 truncate">
-                        {selectedUser.email}
-                      </p>
-                      <p
-                        className={`text-xs font-medium truncate ${getRoleColor(
-                          selectedUser.role
-                        )}`}
-                      >
+                    <div>
+                      <h3 className="text-xl font-bold">{selectedUser.name}</h3>
+                      <p className="text-teal-100 font-medium">
                         {selectedUser.role} • {selectedUser.department}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Messages */}
-                <div
-                  className="flex-1 overflow-y-auto p-4 space-y-3"
-                  style={{ maxHeight: "calc(500px - 120px)" }}
-                >
-                  {messages.length === 0 ? (
-                    <div className="text-center text-gray-500 mt-6">
-                      <MessageCircle className="h-10 w-10 mx-auto mb-3 text-gray-300" />
-                      <p className="text-sm">
-                        No messages yet. Start the conversation!
-                      </p>
-                    </div>
-                  ) : (
-                    messages.map((message) => {
-                      const isCurrentUser =
-                        message.senderId === getCurrentUserId();
-                      return (
+                {/* Enhanced Messages Area */}
+                <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-gray-50 to-white">
+                  <div className="space-y-4">
+                    {messages.map((message) => (
+                      <div
+                        key={message.id}
+                        className={`flex ${
+                          message.senderId === getCurrentUserId()
+                            ? "justify-end"
+                            : "justify-start"
+                        }`}
+                      >
                         <div
-                          key={message.id}
-                          className={`flex ${
-                            isCurrentUser ? "justify-end" : "justify-start"
+                          className={`max-w-xs lg:max-w-md px-6 py-4 rounded-3xl shadow-lg ${
+                            message.senderId === getCurrentUserId()
+                              ? "bg-gradient-to-r from-teal-500 to-cyan-500 text-white"
+                              : "bg-white border border-gray-200 text-gray-800"
                           }`}
                         >
-                          <div
-                            className={`flex items-start space-x-2 max-w-[70%] ${
-                              isCurrentUser
-                                ? "flex-row-reverse space-x-reverse"
-                                : ""
+                          <p className="font-medium">{message.message}</p>
+                          <p
+                            className={`text-xs mt-2 ${
+                              message.senderId === getCurrentUserId()
+                                ? "text-teal-100"
+                                : "text-gray-500"
                             }`}
                           >
-                            <div
-                              className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
-                                isCurrentUser ? "bg-teal-500" : "bg-gray-500"
-                              }`}
-                            >
-                              <User className="h-3 w-3 text-white" />
-                            </div>
-                            <div
-                              className={`rounded-lg p-3 break-words ${
-                                isCurrentUser
-                                  ? "bg-gradient-to-r from-teal-500 to-cyan-500 text-white"
-                                  : "bg-gray-100 text-gray-900"
-                              }`}
-                            >
-                              <p className="text-sm break-words">
-                                {message.message}
-                              </p>
-                              <p
-                                className={`text-xs mt-1 opacity-70 ${
-                                  isCurrentUser
-                                    ? "text-teal-100"
-                                    : "text-gray-500"
-                                }`}
-                              >
-                                {formatTime(message.timestamp)}
-                              </p>
-                            </div>
-                          </div>
+                            {formatTime(message.timestamp)}
+                          </p>
                         </div>
-                      );
-                    })
-                  )}
-                  <div ref={messagesEndRef} />
+                      </div>
+                    ))}
+                    <div ref={messagesEndRef} />
+                  </div>
                 </div>
 
-                {/* Input */}
-                <div className="p-4 border-t border-gray-200 bg-gray-50">
-                  <form onSubmit={sendMessage} className="flex space-x-3">
+                {/* Enhanced Message Input */}
+                <div className="bg-white border-t border-gray-200 p-6">
+                  <form onSubmit={sendMessage} className="flex space-x-4">
                     <input
                       type="text"
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       placeholder="Type your message..."
-                      className="flex-1 p-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                      disabled={loading}
+                      className="flex-1 p-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-teal-500/20 focus:border-teal-500 transition-all duration-300 font-medium"
                     />
                     <button
                       type="submit"
                       disabled={loading || !newMessage.trim()}
-                      className="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white p-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl"
+                      className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white p-4 rounded-2xl hover:from-teal-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl"
                     >
-                      <Send className="h-5 w-5" />
+                      <Send className="h-6 w-6" />
                     </button>
                   </form>
                 </div>
-              </div>
+              </>
             ) : (
-              <div className="bg-gradient-to-br from-teal-50 to-cyan-50 p-8 text-center h-full flex items-center justify-center">
+              <div className="bg-gradient-to-b from-gray-50 to-white p-12 text-center h-full flex items-center justify-center">
                 <div>
-                  <MessageCircle className="h-16 w-16 text-teal-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-800 mb-2">
+                  <div className="w-24 h-24 bg-gradient-to-r from-teal-100 to-cyan-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                    <MessageCircle className="h-12 w-12 text-teal-400" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-600 mb-3">
                     Select a Conversation
                   </h3>
-                  <p className="text-teal-600">
-                    Choose a conversation from the sidebar or start a new chat.
+                  <p className="text-gray-500 text-lg">
+                    Choose a conversation from the sidebar or start a new chat
+                    to begin messaging.
                   </p>
                 </div>
               </div>
