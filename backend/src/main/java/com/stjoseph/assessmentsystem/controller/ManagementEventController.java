@@ -25,7 +25,7 @@ import com.stjoseph.assessmentsystem.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/management-events")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "https://your-frontend-domain.com"})
 public class ManagementEventController {
 
     @Autowired

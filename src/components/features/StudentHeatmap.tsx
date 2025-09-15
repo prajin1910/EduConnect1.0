@@ -404,31 +404,6 @@ const StudentHeatmap: React.FC = () => {
           <h3 className="text-2xl font-bold text-gray-600 mb-3">
             Select a Student
           </h3>
-          <p className="text-gray-500 text-lg">
-            Search for a student to view their activity heatmap and attendance
-            details.
-          </p>
-          <div className="mt-4 text-sm text-gray-500">
-            <p>The analysis includes:</p>
-            <div className="mt-2 grid grid-cols-2 gap-2 max-w-md mx-auto">
-              <div className="flex items-center space-x-1">
-                <span>📊</span>
-                <span>Activity Heatmap</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <span>📅</span>
-                <span>Attendance Records</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <span>📈</span>
-                <span>Attendance Percentage</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <span>📝</span>
-                <span>Resume Analysis</span>
-              </div>
-            </div>
-          </div>
         </div>
       )}
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import AlumniDirectoryUnified from './AlumniDirectoryUnified';
+import AlumniDirectoryFixed from './AlumniDirectoryFixed';
 
 // Alumni Directory for Other Portals (includes connect button for all users)
 const AlumniDirectory: React.FC = () => {
-  return <AlumniDirectoryUnified showConnectButton={true} />;
+  return <AlumniDirectoryFixed />;
 };
 
 export default AlumniDirectory;

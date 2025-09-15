@@ -48,7 +48,7 @@ const VerifyOTP: React.FC = () => {
     try {
       const response = await authAPI.verifyOTP({ email, otp });
       showToast(response, 'success');
-      navigate('/login');
+      navigate('/');
     } catch (error: any) {
       showToast(error.response?.data || error.message || 'OTP verification failed', 'error');
     } finally {

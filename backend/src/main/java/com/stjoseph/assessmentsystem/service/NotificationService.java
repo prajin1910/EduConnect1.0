@@ -290,4 +290,28 @@ public class NotificationService {
             System.err.println("Error creating job post notification: " + e.getMessage());
         }
     }
+    
+    // Circular notification method
+    public void createCircularNotification(String recipientId, String circularId, String title, String message, String senderName, String senderRole) {
+        try {
+            System.out.println("NotificationService: Creating circular notification");
+            System.out.println("Recipient ID: " + recipientId + ", Circular ID: " + circularId + ", Sender: " + senderName);
+            
+            Notification notification = new Notification();
+            notification.setType(Notification.NotificationType.CIRCULAR);
+            notification.setTitle(title);
+            notification.setMessage(message);
+            notification.setRecipients(List.of(recipientId));
+            notification.setCircularId(circularId);
+            notification.setSenderName(senderName);
+            notification.setSenderRole(senderRole);
+            notification.setReadBy(new ArrayList<>());
+            
+            notificationRepository.save(notification);
+            System.out.println("NotificationService: Circular notification created successfully");
+        } catch (Exception e) {
+            System.err.println("Error creating circular notification: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

@@ -13,7 +13,7 @@ const UserProfileView: React.FC = () => {
 
   useEffect(() => {
     if (!userId || !token) {
-      navigate('/login');
+      navigate('/');
       return;
     }
 
@@ -74,7 +74,7 @@ const UserProfileView: React.FC = () => {
   };
 
   if (!userId) {
-    navigate('/login');
+    navigate('/');
     return null;
   }
 

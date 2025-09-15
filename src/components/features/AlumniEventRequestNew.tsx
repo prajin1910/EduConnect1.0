@@ -32,7 +32,7 @@ const AlumniEventRequestNew: React.FC = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:8080/api/alumni-events/request', {
+      const response = await axios.post('https://backend-7y12.onrender.com/api/alumni-events/request', {
         ...formData,
         maxAttendees: parseInt(formData.maxAttendees) || 0
       }, {

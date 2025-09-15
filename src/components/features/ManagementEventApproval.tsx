@@ -37,7 +37,7 @@ const ManagementEventApproval: React.FC = () => {
   const loadPendingRequests = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8080/api/management/events/pending', {
+      const response = await axios.get('https://backend-7y12.onrender.com/api/management/events/pending', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -57,7 +57,7 @@ const ManagementEventApproval: React.FC = () => {
     setActionLoading(eventId);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put(`http://localhost:8080/api/management/events/${eventId}/approve`, {}, {
+      const response = await axios.put(`https://backend-7y12.onrender.com/api/management/events/${eventId}/approve`, {}, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -85,7 +85,7 @@ const ManagementEventApproval: React.FC = () => {
     setActionLoading(eventId);
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.put(`http://localhost:8080/api/management/events/${eventId}/reject`, {
+      const response = await axios.put(`https://backend-7y12.onrender.com/api/management/events/${eventId}/reject`, {
         reason: rejectionReason
       }, {
         headers: {

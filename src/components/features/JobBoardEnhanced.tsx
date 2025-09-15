@@ -242,39 +242,39 @@ const JobBoardEnhanced: React.FC = React.memo(() => {
 
   if (loading) {
     return (
-      <div className="card content-padding">
+      <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
         <div className="flex flex-col items-center justify-center py-16">
           <div className="relative">
-            <div className="w-16 h-16 border-4 border-white/20 border-t-orange-500 rounded-full animate-spin"></div>
+            <div className="w-16 h-16 border-4 border-gray-200 border-t-orange-500 rounded-full animate-spin"></div>
             <div className="absolute inset-0 flex items-center justify-center">
               <Briefcase className="h-6 w-6 text-orange-500" />
             </div>
           </div>
-          <p className="mt-6 text-lg font-medium text-white">Loading Job Opportunities</p>
-          <p className="text-sm text-white/60">Fetching the latest career opportunities for you</p>
+          <p className="mt-6 text-lg font-medium text-gray-900">Loading Job Opportunities</p>
+          <p className="text-sm text-gray-600">Fetching the latest career opportunities for you</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Professional Header */}
-      <div className="card content-padding">
+      <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-4 sm:space-y-0">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-glow">
+            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
               <Briefcase className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h2 className="heading-secondary">Job Opportunities</h2>
-              <p className="text-body text-sm">Discover career opportunities from our alumni network</p>
+              <h2 className="text-2xl font-bold text-gray-900">Available Positions</h2>
+              <p className="text-gray-600 text-sm">Discover career opportunities from our alumni network</p>
             </div>
           </div>
           {user?.role === 'ALUMNI' && (
             <button
               onClick={() => setShowCreateForm(true)}
-              className="btn-primary flex items-center space-x-2"
+              className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors space-x-2"
             >
               <Plus className="h-5 w-5" />
               <span>Post Job</span>

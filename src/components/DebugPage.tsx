@@ -30,7 +30,7 @@ const DebugPage: React.FC = () => {
 
     try {
       // Test status
-      const statusResponse = await fetch('http://localhost:8080/api/debug/status');
+      const statusResponse = await fetch('https://backend-7y12.onrender.com/api/debug/status');
       if (statusResponse.ok) {
         status = await statusResponse.json();
       } else {
@@ -42,7 +42,7 @@ const DebugPage: React.FC = () => {
 
     try {
       // Test events
-      const eventsResponse = await fetch('http://localhost:8080/api/debug/events');
+      const eventsResponse = await fetch('https://backend-7y12.onrender.com/api/debug/events');
       if (eventsResponse.ok) {
         const eventsData = await eventsResponse.json();
         events = eventsData.events || [];
@@ -55,7 +55,7 @@ const DebugPage: React.FC = () => {
 
     try {
       // Test alumni
-      const alumniResponse = await fetch('http://localhost:8080/api/debug/alumni');
+      const alumniResponse = await fetch('https://backend-7y12.onrender.com/api/debug/alumni');
       if (alumniResponse.ok) {
         const alumniData = await alumniResponse.json();
         alumni = alumniData.alumni || [];

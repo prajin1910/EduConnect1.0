@@ -1,11 +1,14 @@
 com/stjoseph/assessmentsystem/service/AuthService.class
 com/stjoseph/assessmentsystem/controller/ProfessorProfileController.class
+com/stjoseph/assessmentsystem/model/Circular$CircularStatus.class
 com/stjoseph/assessmentsystem/model/Connection$ConnectionStatus.class
 com/stjoseph/assessmentsystem/model/Notification.class
 com/stjoseph/assessmentsystem/model/Connection.class
+com/stjoseph/assessmentsystem/service/CircularService.class
 com/stjoseph/assessmentsystem/repository/AssessmentRepository.class
 com/stjoseph/assessmentsystem/model/Resume$Experience.class
 com/stjoseph/assessmentsystem/controller/AttendanceController.class
+com/stjoseph/assessmentsystem/repository/CircularRepository.class
 com/stjoseph/assessmentsystem/security/JwtAuthenticationEntryPoint.class
 com/stjoseph/assessmentsystem/model/OTPVerification.class
 com/stjoseph/assessmentsystem/model/Event$EventStatus.class
@@ -30,6 +33,7 @@ com/stjoseph/assessmentsystem/model/Assessment$Question.class
 com/stjoseph/assessmentsystem/model/User$UserRole.class
 com/stjoseph/assessmentsystem/model/Notification$NotificationType.class
 com/stjoseph/assessmentsystem/repository/JobRepository.class
+com/stjoseph/assessmentsystem/controller/CircularController.class
 com/stjoseph/assessmentsystem/controller/ActivityController.class
 com/stjoseph/assessmentsystem/model/AssessmentResult$Answer.class
 com/stjoseph/assessmentsystem/model/Task$TaskStatus.class
@@ -47,14 +51,17 @@ com/stjoseph/assessmentsystem/controller/ManagementEventController.class
 com/stjoseph/assessmentsystem/service/ConnectionService$UserDetails.class
 com/stjoseph/assessmentsystem/repository/ActivityRepository.class
 com/stjoseph/assessmentsystem/controller/AssessmentController.class
+com/stjoseph/assessmentsystem/service/CircularService$1.class
 com/stjoseph/assessmentsystem/model/Job$JobType.class
 com/stjoseph/assessmentsystem/repository/AttendanceRepository.class
 com/stjoseph/assessmentsystem/controller/DebugController.class
 com/stjoseph/assessmentsystem/dto/LoginResponse.class
 com/stjoseph/assessmentsystem/service/EventCleanupService.class
+com/stjoseph/assessmentsystem/model/Circular$SenderRole.class
 com/stjoseph/assessmentsystem/dto/AIAssessmentRequest.class
 com/stjoseph/assessmentsystem/repository/EventRepository.class
 com/stjoseph/assessmentsystem/service/ManagementService.class
+com/stjoseph/assessmentsystem/dto/CircularRequest.class
 com/stjoseph/assessmentsystem/model/AssessmentResult$Feedback.class
 com/stjoseph/assessmentsystem/service/AlumniProfileService.class
 com/stjoseph/assessmentsystem/dto/ChatRequest.class
@@ -88,6 +95,7 @@ com/stjoseph/assessmentsystem/model/Assessment.class
 com/stjoseph/assessmentsystem/dto/AlumniStatsResponse.class
 com/stjoseph/assessmentsystem/controller/JobController.class
 com/stjoseph/assessmentsystem/model/Resume$ContactInfo.class
+com/stjoseph/assessmentsystem/model/Circular$RecipientType.class
 com/stjoseph/assessmentsystem/repository/UserRepository.class
 com/stjoseph/assessmentsystem/repository/ConnectionRepository.class
 com/stjoseph/assessmentsystem/service/NotificationService.class
@@ -100,6 +108,7 @@ com/stjoseph/assessmentsystem/service/UserDetailsServiceImpl.class
 com/stjoseph/assessmentsystem/repository/NotificationRepository.class
 com/stjoseph/assessmentsystem/controller/AlumniController.class
 com/stjoseph/assessmentsystem/controller/ConnectionController.class
+com/stjoseph/assessmentsystem/model/Circular.class
 com/stjoseph/assessmentsystem/model/Event$EventType.class
 com/stjoseph/assessmentsystem/model/Activity.class
 com/stjoseph/assessmentsystem/service/JobService.class

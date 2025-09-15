@@ -20,6 +20,9 @@ public class Notification {
     private String organizerName;
     private LocalDateTime eventDate;
     private String relatedEntityId; // For connections, this would be the other user's ID
+    private String circularId; // For circular notifications
+    private String senderName; // For circular notifications
+    private String senderRole; // For circular notifications
     private LocalDateTime createdAt;
     private List<String> recipients; // User IDs who should receive this notification
     private List<String> readBy; // User IDs who have read this notification
@@ -32,7 +35,8 @@ public class Notification {
         CONNECTION_REQUEST,
         CONNECTION_ACCEPTED,
         NEW_FOLLOWER,
-        JOB_POST
+        JOB_POST,
+        CIRCULAR
     }    // Constructors
     public Notification() {
         this.createdAt = LocalDateTime.now();
@@ -140,5 +144,29 @@ public class Notification {
     
     public void setRelatedEntityId(String relatedEntityId) {
         this.relatedEntityId = relatedEntityId;
+    }
+    
+    public String getCircularId() {
+        return circularId;
+    }
+    
+    public void setCircularId(String circularId) {
+        this.circularId = circularId;
+    }
+    
+    public String getSenderName() {
+        return senderName;
+    }
+    
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+    
+    public String getSenderRole() {
+        return senderRole;
+    }
+    
+    public void setSenderRole(String senderRole) {
+        this.senderRole = senderRole;
     }
 }

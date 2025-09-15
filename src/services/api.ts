@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'https://backend-7y12.onrender.com/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -38,11 +38,11 @@ api.interceptors.response.use(
         
         // Only redirect if not already on auth pages
         const currentPath = window.location.pathname;
-        if (!currentPath.includes('/login') && 
-            !currentPath.includes('/register') && 
-            !currentPath.includes('/verify-otp')) {
-          console.log('Redirecting to login due to authentication failure');
-          window.location.href = '/login';
+          if (!currentPath.includes('/login') && 
+              !currentPath.includes('/register') && 
+              !currentPath.includes('/verify-otp')) {
+            console.log('Redirecting to landing page due to authentication failure');
+            window.location.href = '/';
         }
       } else {
         // For other 401 errors (like "user not found"), don't redirect
@@ -588,7 +588,7 @@ export const eventsAPI = {
       console.error('Events API error:', error);
       // If authenticated API fails, try debug endpoint as fallback
       try {
-        const fallbackResponse = await fetch('http://localhost:8080/api/debug/events');
+        const fallbackResponse = await fetch('https://backend-7y12.onrender.com/api/debug/events');
         if (fallbackResponse.ok) {
           const data = await fallbackResponse.json();
           return data.events || [];
@@ -602,6 +602,67 @@ export const eventsAPI = {
 
   updateAttendance: async (eventId: string, attending: boolean) => {
     const response = await api.post(`/api/events/${eventId}/attendance`, { attending });
+    return response.data;
+  },
+};
+
+// Circular API
+export const circularAPI = {
+  // Create a new circular
+  createCircular: async (data: {
+    title: string;
+    body: string;
+    recipientTypes: string[];
+  }) => {
+    const response = await api.post('/circulars', data);
+    return response.data;
+  },
+
+  // Get circulars received by current user
+  getMyReceivedCirculars: async () => {
+    const response = await api.get('/circulars/my-received');
+    return response.data;
+  },
+
+  // Get circulars sent by current user
+  getMySentCirculars: async () => {
+    const response = await api.get('/circulars/my-sent');
+    return response.data;
+  },
+
+  // Get a specific circular by ID
+  getCircular: async (id: string) => {
+    const response = await api.get(`/circulars/${id}`);
+    return response.data;
+  },
+
+  // Mark circular as read
+  markAsRead: async (id: string) => {
+    const response = await api.post(`/circulars/${id}/read`);
+    return response.data;
+  },
+
+  // Archive a circular
+  archiveCircular: async (id: string) => {
+    const response = await api.post(`/circulars/${id}/archive`);
+    return response.data;
+  },
+
+  // Get unread circular count
+  getUnreadCount: async () => {
+    const response = await api.get('/circulars/unread-count');
+    return response.data;
+  },
+
+  // Get circular statistics
+  getStats: async () => {
+    const response = await api.get('/circulars/stats');
+    return response.data;
+  },
+
+  // Get all circulars (for management)
+  getAllCirculars: async () => {
+    const response = await api.get('/circulars/all');
     return response.data;
   },
 };

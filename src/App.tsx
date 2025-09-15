@@ -1,7 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import StyledLogin from "./components/auth/StyledLogin";
 import StyledRegister from "./components/auth/StyledRegister";
 import VerifyOTP from "./components/auth/VerifyOTP";
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -23,9 +21,7 @@ function App() {
         <AuthProvider>
           <Router>
             <Routes>
-              <Route path="/login" element={<StyledLogin />} />
               <Route path="/register" element={<StyledRegister />} />
-              <Route path="/login-old" element={<Login />} />
               <Route path="/register-old" element={<Register />} />
               <Route path="/verify-otp" element={<VerifyOTP />} />
               <Route path="/debug" element={<DebugPage />} />

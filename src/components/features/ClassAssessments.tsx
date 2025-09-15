@@ -207,8 +207,8 @@ const ClassAssessments: React.FC = () => {
           }
         } else if (error.response.status === 401) {
           errorMessage = 'Session expired. Please login again.';
-          // Redirect to login if session expired
-          window.location.href = '/login';
+          // Redirect to landing page if session expired
+          window.location.href = '/';
           return;
         } else if (error.response.status === 403) {
           errorMessage = 'You are not authorized to submit this assessment.';

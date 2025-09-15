@@ -24,14 +24,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
   }
 
   if (!user) {
-    console.log('ProtectedRoute: No authenticated user, redirecting to login');
-    return <Navigate to="/login" replace />;
+    console.log('ProtectedRoute: No authenticated user, redirecting to landing page');
+    return <Navigate to="/" replace />;
   }
 
   if (!allowedRoles.includes(user.role)) {
     console.log('ProtectedRoute: User role not authorized:', user.role, 'Required:', allowedRoles);
     showToast('You do not have permission to access this page', 'error');
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   console.log('ProtectedRoute: Access granted for user:', user.name, 'Role:', user.role);

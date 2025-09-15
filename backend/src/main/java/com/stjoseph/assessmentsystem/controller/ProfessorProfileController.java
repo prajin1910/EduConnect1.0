@@ -22,7 +22,7 @@ import com.stjoseph.assessmentsystem.service.UserService;
 
 @RestController
 @RequestMapping("/professors")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "https://your-frontend-domain.com"})
 public class ProfessorProfileController {
 
     @Autowired

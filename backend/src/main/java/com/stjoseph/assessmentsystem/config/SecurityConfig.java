@@ -67,6 +67,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/circulars/**").authenticated()
                 .requestMatchers(HttpMethod.GET, "/jobs").permitAll()
                 .requestMatchers(HttpMethod.GET, "/jobs/search").permitAll()
                 .requestMatchers(HttpMethod.GET, "/jobs/{id}").permitAll()

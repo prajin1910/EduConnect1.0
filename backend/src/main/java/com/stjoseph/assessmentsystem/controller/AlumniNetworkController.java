@@ -20,7 +20,7 @@ import com.stjoseph.assessmentsystem.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/alumni-network")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "https://your-frontend-domain.com"})
 public class AlumniNetworkController {
 
     @Autowired
