@@ -25,7 +25,7 @@ app:
     expiration: 604800000  # 7 days instead of 1 day
   ai:
     gemini:
-      api-key: AIzaSyBf9cbDiHXE1pR83hDyeMw_2QNZFSb4f_8
+      api-key: AIzaSyAargoUSTCvMDQyyMPtkq9Q6LGUQI1RQEY
       url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent
   resume:
     upload-dir: uploads/resumes
