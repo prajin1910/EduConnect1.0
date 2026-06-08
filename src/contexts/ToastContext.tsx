@@ -1,7 +1,9 @@
+
 import React, { createContext, useContext, useState } from 'react';
 
 interface Toast {
   id: string;
+     
   message: string;
   type: 'success' | 'error' | 'info' | 'warning';
 }
